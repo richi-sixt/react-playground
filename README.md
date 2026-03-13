@@ -40,14 +40,11 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Ideas for Future Experiments
-
-- **Memory Game** — `useEffect`, timers, conditional rendering
-- **Todo App** — `useReducer`, `useContext`, CRUD patterns
-- **Fetch & Display** — data fetching, loading states, error boundaries
-- **Drag & Drop** — refs, pointer events, custom hooks
-- **Theme Builder** — CSS custom properties, context, persistence
-- **Animation Sandbox** — transitions, `useRef`, `requestAnimationFrame`
+## Ideas and to-dos
+- [ ] How testing works with React/JS
+- [ ] **Tic-Tac-Toe** multiplayer (websocket?)
+- [ ] **Memory Game** — `useEffect`, timers, conditional rendering
+- [ ] **Todo App** — `useReducer`, `useContext`, CRUD patterns, auth, database
 
 ## Resources
 
