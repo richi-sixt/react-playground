@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import {
@@ -9,8 +10,10 @@ import {
   PopoverBackdrop,
   PopoverPanel,
 } from '@headlessui/react'
+import clsx from 'clsx'
 
 import { Container } from '@/components/Container'
+import avatarImage from '@/images/react.svg'
 
 function CloseIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -188,6 +191,43 @@ function ThemeToggle() {
   )
 }
 
+function AvatarContainer({
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<'div'>) {
+  return (
+    <div
+      className={clsx(
+        className,
+        'h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:ring-white/10',
+      )}
+      {...props}
+    />
+  )
+}
+
+function Avatar({
+  className,
+  ...props
+}: Omit<React.ComponentPropsWithoutRef<typeof Link>, 'href'>) {
+  return (
+    <Link
+      href="/"
+      aria-label="Home"
+      className={clsx(className, 'pointer-events-auto')}
+      {...props}
+    >
+      <Image
+        src={avatarImage}
+        alt=""
+        sizes="2.25rem"
+        className="h-9 w-9 rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
+        priority
+      />
+    </Link>
+  )
+}
+
 export function Header() {
   return (
     <header className="pointer-events-none fixed top-0 z-50 w-full">
@@ -195,15 +235,9 @@ export function Header() {
         <Container>
           <div className="relative flex items-center gap-4">
             <div className="flex flex-1">
-              <Link
-                href="/"
-                aria-label="Home"
-                className="pointer-events-auto flex items-center gap-2"
-              >
-                <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                  React Playground
-                </span>
-              </Link>
+              <AvatarContainer>
+                <Avatar />
+              </AvatarContainer>
             </div>
             <div className="flex flex-1 justify-center">
               <MobileNavigation className="pointer-events-auto md:hidden" />
