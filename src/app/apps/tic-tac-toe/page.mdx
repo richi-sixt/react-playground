@@ -1,0 +1,32 @@
+import { AppLayout } from '@/components/AppLayout'
+
+export const app = {
+  title: 'Tic Tac Toe',
+  description:
+    'Classic two-player game with move history and time travel. Built following the official React tutorial.',
+  tech: ['React', 'TypeScript', 'useState'],
+  url: '/apps/tic-tac-toe/play/',
+  date: '2025-03-02',
+  category: 'games',
+}
+
+export const metadata = {
+  title: app.title,
+  description: app.description,
+}
+
+export default ({ children }) => <AppLayout app={app}>{children}</AppLayout>
+
+A classic Tic-Tac-Toe game built as a first React project, based on the official React tutorial.
+
+## What I learned
+
+- React component structure and composition
+- State management with `useState`
+- Handling user interactions and events
+- Conditional rendering
+- Immutable data patterns for move history
+
+## Technical details
+
+The game features a 3x3 grid where two players take turns placing X and O marks. It includes move history tracking and the ability to jump back to any previous move, demonstrating how immutable state updates enable powerful features like time travel debugging.

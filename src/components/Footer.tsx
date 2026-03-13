@@ -8,7 +8,7 @@ export function Footer() {
           <ContainerInner>
             <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
               <p className="text-sm text-zinc-400 dark:text-zinc-500">
-                &copy; {new Date().getFullYear()} React Playground. Built with
+                &copy; {new Date().getFullYear()} Rüchan Sixt. Built with
                 Next.js &amp; React.
               </p>
             </div>
