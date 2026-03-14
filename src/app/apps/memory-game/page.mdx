@@ -1,5 +1,5 @@
 
-import { AppLayout } from '@/components/AppLayout'
+import { AppDetailLayout } from '@/components/AppDetailLayout'
 
 export const app = {
   title: 'Memory Game',
@@ -16,7 +16,7 @@ export const metadata = {
   description: app.description,
 }
 
-export default ({ children }) => <AppLayout app={app}>{children}</AppLayout>
+export default ({ children }) => <AppDetailLayout app={app}>{children}</AppDetailLayout>
 
 A memory card game where you flip cards to find matching pairs, built with React.
 

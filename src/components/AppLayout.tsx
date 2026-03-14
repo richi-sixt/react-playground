@@ -1,13 +1,15 @@
-
 'use client'
 
 import { useContext } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 import { AppContext } from '@/app/providers'
 import { Container } from '@/components/Container'
 import { Prose } from '@/components/Prose'
 import { type AppWithSlug } from '@/lib/apps'
+import { type JournalEntryWithSlug } from '@/lib/journal'
+import { formatDate } from '@/lib/formatDate'
 
 function ArrowLeftIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -48,9 +50,11 @@ function GitHubIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 export function AppLayout({
   app,
   children,
+  journalEntries,
 }: {
   app: AppWithSlug
   children: React.ReactNode
+  journalEntries?: JournalEntryWithSlug[]
 }) {
   let router = useRouter()
   let { previousPathname } = useContext(AppContext)
@@ -111,6 +115,31 @@ export function AppLayout({
               {children}
             </Prose>
           </article>
+
+          {journalEntries && journalEntries.length > 0 && (
+            <section className="mt-16 border-t border-zinc-100 pt-10 dark:border-zinc-700/40">
+              <h2 className="text-lg font-semibold text-zinc-800 dark:text-zinc-100">
+                Related Journal Entries
+              </h2>
+              <ul className="mt-4 space-y-4">
+                {journalEntries.map((entry) => (
+                  <li key={entry.slug}>
+                    <Link
+                      href={`/journal/${entry.slug}/`}
+                      className="group flex flex-col"
+                    >
+                      <span className="text-sm font-medium text-zinc-800 group-hover:text-violet-500 dark:text-zinc-200 dark:group-hover:text-violet-400">
+                        {entry.title}
+                      </span>
+                      <span className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                        {formatDate(entry.date)}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
         </div>
       </div>
     </Container>
