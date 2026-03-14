@@ -1,0 +1,91 @@
+
+'use client'
+
+import { useState } from 'react'
+import clsx from 'clsx'
+
+import { Card } from '@/components/Card'
+import { formatDate } from '@/lib/formatDate'
+import { type JournalEntryWithSlug } from '@/lib/journal'
+
+export function JournalList({ entries }: { entries: JournalEntryWithSlug[] }) {
+  let [category, setCategory] = useState('all')
+
+  let categories = [
+    'all',
+    ...new Set(entries.map((e) => e.category).sort()),
+  ]
+
+  let filtered =
+    category === 'all'
+      ? entries
+      : entries.filter((e) => e.category === category)
+
+  return (
+    <>
+      <div className="mb-8 flex flex-wrap gap-2">
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setCategory(cat)}
+            className={clsx(
+              'rounded-full px-4 py-1.5 text-sm font-medium capitalize transition',
+              category === cat
+                ? 'bg-violet-500 text-white'
+                : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700',
+            )}
+          >
+            {cat === 'all' ? 'All' : cat}
+          </button>
+        ))}
+      </div>
+
+      <div className="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40">
+        <div className="flex max-w-3xl flex-col space-y-16">
+          {filtered.map((entry) => (
+            <article
+              key={entry.slug}
+              className="md:grid md:grid-cols-4 md:items-baseline"
+            >
+              <Card className="md:col-span-3">
+                <Card.Title href={`/journal/${entry.slug}/`}>
+                  {entry.title}
+                </Card.Title>
+                <Card.Eyebrow
+                  as="time"
+                  dateTime={entry.date}
+                  className="md:hidden"
+                  decorate
+                >
+                  {formatDate(entry.date)}
+                </Card.Eyebrow>
+                <Card.Description>{entry.description}</Card.Description>
+                <div className="relative z-10 mt-4 flex flex-wrap gap-1">
+                  <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
+                    {entry.category}
+                  </span>
+                  {entry.tags?.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <Card.Cta>Read more</Card.Cta>
+              </Card>
+              <Card.Eyebrow
+                as="time"
+                dateTime={entry.date}
+                className="mt-1 max-md:hidden"
+              >
+                {formatDate(entry.date)}
+              </Card.Eyebrow>
+            </article>
+          ))}
+        </div>
+      </div>
+    </>
+  )
+}

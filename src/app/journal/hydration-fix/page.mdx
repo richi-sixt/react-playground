@@ -1,0 +1,54 @@
+
+import { JournalLayout } from '@/components/JournalLayout'
+
+export const entry = {
+  title: 'Fixing Hydration Mismatch in Memory Game',
+  description:
+    'How Math.random() causes SSR hydration errors and the solution using the mounted pattern.',
+  date: '2025-03-14',
+  category: 'development',
+  tags: ['react', 'ssr', 'hydration', 'nextjs'],
+  relatedApps: ['memory-game'],
+}
+
+export const metadata = {
+  title: entry.title,
+  description: entry.description,
+}
+
+export default ({ children }) => <JournalLayout entry={entry}>{children}</JournalLayout>
+
+When building the Memory Game, I ran into a persistent React hydration mismatch error that took some debugging to resolve.
+
+## The Problem
+
+The Memory Game shuffles cards on load using `Math.random()`. Since Next.js renders components on the server first, the server generates one random order while the client generates a different one. React detects the mismatch between the server-rendered HTML and the client-rendered DOM, producing hydration errors.
+
+## What I Tried
+
+My first approach was separating the deck creation into a deterministic `createDeck()` function (used as the initial `useState` value) and a `shuffleDeck()` function called in `useEffect`. The idea was that both server and client would start with the same deterministic order, and the shuffle would only happen after mount.
+
+This didn't fully work because the dev server cached the previous SSR output with the old shuffled deck.
+
+## The Solution
+
+The fix was the **empty initial state pattern**: initialize `useState` with an empty array, render placeholder face-down cards during SSR, and populate the shuffled deck only on the client in `useEffect`.
+
+```typescript
+const [cards, setCards] = useState<Card[]>([])
+
+useEffect(() => {
+  setCards(shuffleDeck(createDeck()))
+}, [])
+```
+
+Since all cards start face-down (showing "?"), the user sees no visual difference between the placeholder and real cards. The hydration mismatch is completely eliminated because the server and client both render the same empty-state placeholder grid.
+
+## Key Takeaway
+
+Any time you use `Math.random()`, `Date.now()`, or other non-deterministic values in a server-rendered React component, you need to defer that logic to a client-only `useEffect`. The safest pattern is to render a deterministic placeholder on the server and swap in the dynamic content after mount.
+
+## Resources
+
+- [React hydration error](https://nextjs.org/docs/messages/react-hydration-error)
+- [hydrateRoot](https://react.dev/reference/react-dom/client/hydrateRoot)

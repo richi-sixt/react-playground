@@ -1,3 +1,4 @@
+// data model, auto-discovery via fast-glob
 
 import glob from 'fast-glob'
 
