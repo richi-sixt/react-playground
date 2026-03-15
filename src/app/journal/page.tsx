@@ -3,6 +3,8 @@ import { Container } from '@/components/Container'
 import { JournalList } from '@/components/JournalList'
 import { getAllJournalEntries } from '@/lib/journal'
 
+export const dynamic = 'force-static'
+
 export const metadata = {
   title: 'Journal',
   description:

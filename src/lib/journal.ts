@@ -1,6 +1,5 @@
-// data model, auto-discovery via fast-glob
-
-import glob from 'fast-glob'
+import fs from 'node:fs'
+import path from 'node:path'
 
 interface JournalEntry {
   title: string
@@ -30,9 +29,15 @@ async function importEntry(
 }
 
 export async function getAllJournalEntries() {
-  let entryFilenames = await glob('*/page.mdx', {
-    cwd: './src/app/journal',
-  })
+  let journalDir = path.join(process.cwd(), 'src/app/journal')
+  let dirEntries = fs.readdirSync(journalDir, { withFileTypes: true })
+  let entryFilenames = dirEntries
+    .filter(
+      (e) =>
+        e.isDirectory() &&
+        fs.existsSync(path.join(journalDir, e.name, 'page.mdx')),
+    )
+    .map((e) => `${e.name}/page.mdx`)
 
   let entries = await Promise.all(entryFilenames.map(importEntry))
 

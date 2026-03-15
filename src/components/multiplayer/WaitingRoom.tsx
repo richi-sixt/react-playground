@@ -46,7 +46,7 @@ export function WaitingRoom({ room, playerId, onRoomReady }: WaitingRoomProps) {
     <div className="flex flex-col items-center">
       <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-700 dark:bg-zinc-800">
         <h2 className="text-center text-lg font-semibold text-zinc-800 dark:text-zinc-200">
-          Teile diesen Code mit deinem Mitspieler
+          Share this code with your teammate.
         </h2>
 
         <div className="mt-6 flex items-center justify-center gap-3">
@@ -57,7 +57,7 @@ export function WaitingRoom({ room, playerId, onRoomReady }: WaitingRoomProps) {
             onClick={handleCopy}
             className="rounded-lg bg-violet-500 px-4 py-3 text-sm font-medium text-white transition hover:bg-violet-400 dark:bg-violet-600 dark:hover:bg-violet-500"
           >
-            {copied ? '✓ Kopiert' : 'Kopieren'}
+            {copied ? '✓ Copied.' : 'Copy.'}
           </button>
         </div>
 
@@ -68,7 +68,7 @@ export function WaitingRoom({ room, playerId, onRoomReady }: WaitingRoomProps) {
               <span className="relative inline-flex h-3 w-3 rounded-full bg-violet-500" />
             </span>
             <span className="text-sm text-zinc-600 dark:text-zinc-400">
-              Warte auf Mitspieler…
+              Waiting for opponent…
             </span>
           </div>
         </div>
