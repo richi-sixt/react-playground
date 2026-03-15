@@ -40,7 +40,7 @@ export function GameLobby({
       setWaitingRoom(room)
       setMode('waiting')
     } catch (err) {
-      setError('Raum konnte nicht erstellt werden. Bitte versuche es erneut.')
+      setError('Room could not be created. Please try again.')
       console.error('Create room error:', err)
     } finally {
       setIsLoading(false)
@@ -49,7 +49,7 @@ export function GameLobby({
 
   async function handleJoinRoom() {
     if (code.length !== 6) {
-      setError('Bitte gib einen 6-stelligen Code ein.')
+      setError('Please enter a 6-digit code.')
       return
     }
 
@@ -58,17 +58,17 @@ export function GameLobby({
     try {
       const room = await findRoomByCode(code)
       if (!room) {
-        setError('Raum nicht gefunden. Überprüfe den Code.')
+        setError('Room not found. Check the code.')
         setIsLoading(false)
         return
       }
       if (room.game_type !== gameType) {
-        setError('Dieser Raum ist für ein anderes Spiel.')
+        setError('This room is for a different game.')
         setIsLoading(false)
         return
       }
       if (room.status !== 'waiting') {
-        setError('Dieser Raum ist bereits voll oder das Spiel hat begonnen.')
+        setError('This room is already full or the game has started.')
         setIsLoading(false)
         return
       }
@@ -77,7 +77,7 @@ export function GameLobby({
       const updatedRoom = await joinRoom(room.id, playerId, room.player_a)
       onRoomReady(updatedRoom, playerId)
     } catch (err) {
-      setError('Beitreten fehlgeschlagen. Bitte versuche es erneut.')
+      setError('Failed to join. Please try again.')
       console.error('Join room error:', err)
     } finally {
       setIsLoading(false)
@@ -111,7 +111,7 @@ export function GameLobby({
               disabled={isLoading}
               className="rounded-lg bg-violet-500 px-6 py-3 text-base font-medium text-white transition hover:bg-violet-400 disabled:opacity-50 dark:bg-violet-600 dark:hover:bg-violet-500"
             >
-              {isLoading ? 'Erstelle…' : 'Neuer Raum'}
+              {isLoading ? 'Creating…' : 'New Room'}
             </button>
             <button
               onClick={() => {
@@ -120,7 +120,7 @@ export function GameLobby({
               }}
               className="rounded-lg bg-zinc-100 px-6 py-3 text-base font-medium text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600"
             >
-              Raum beitreten
+              Join room
             </button>
           </div>
         )}
@@ -128,7 +128,7 @@ export function GameLobby({
         {mode === 'join' && (
           <div className="flex flex-col gap-4">
             <h2 className="text-center text-lg font-semibold text-zinc-800 dark:text-zinc-200">
-              Raum beitreten
+              Join room
             </h2>
             <input
               type="text"
@@ -137,7 +137,7 @@ export function GameLobby({
                 setCode(e.target.value.toUpperCase().slice(0, 6))
                 setError(null)
               }}
-              placeholder="Code eingeben"
+              placeholder="Join room"
               maxLength={6}
               className="rounded-lg border border-zinc-300 bg-white px-4 py-3 text-center font-mono text-2xl font-bold tracking-[0.2em] text-zinc-900 placeholder:text-zinc-400 placeholder:tracking-normal placeholder:text-base placeholder:font-normal focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100 dark:placeholder:text-zinc-500"
               autoFocus
@@ -147,7 +147,7 @@ export function GameLobby({
               disabled={isLoading || code.length !== 6}
               className="rounded-lg bg-violet-500 px-6 py-3 text-base font-medium text-white transition hover:bg-violet-400 disabled:opacity-50 dark:bg-violet-600 dark:hover:bg-violet-500"
             >
-              {isLoading ? 'Trete bei…' : 'Beitreten'}
+              {isLoading ? 'Joining…' : 'Join'}
             </button>
             <button
               onClick={() => {
@@ -157,7 +157,7 @@ export function GameLobby({
               }}
               className="text-sm text-zinc-500 transition hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
             >
-              ← Zurück
+              ← Back
             </button>
           </div>
         )}

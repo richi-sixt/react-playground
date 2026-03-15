@@ -117,9 +117,9 @@ export function MultiplayerMemoryGame() {
   if (isGameOver) {
     const myScore = isPlayerA ? scoreA : scoreB
     const opponentScore = isPlayerA ? scoreB : scoreA
-    if (myScore > opponentScore) resultText = 'Du gewinnst! 🎉'
-    else if (myScore < opponentScore) resultText = 'Gegner gewinnt!'
-    else resultText = 'Unentschieden!'
+    if (myScore > opponentScore) resultText = 'You win! 🎉'
+    else if (myScore < opponentScore) resultText = 'Opponent wins!'
+    else resultText = 'It’s a tie!'
   }
 
   // Status text
@@ -127,11 +127,11 @@ export function MultiplayerMemoryGame() {
   if (isGameOver) {
     statusText = resultText!
   } else if (isMismatchPhase) {
-    statusText = 'Kein Paar…'
+    statusText = 'No match…'
   } else if (isMyTurn) {
-    statusText = 'Dein Zug'
+    statusText = 'Your turn'
   } else {
-    statusText = 'Gegner ist dran…'
+    statusText = 'Opponent’s turn…'
   }
 
   async function handleCardClick(index: number) {
@@ -216,7 +216,7 @@ export function MultiplayerMemoryGame() {
               : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400',
           )}
         >
-          Du: {myScore}
+          You: {myScore}
         </div>
         <div
           className={clsx(
@@ -226,10 +226,10 @@ export function MultiplayerMemoryGame() {
               : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400',
           )}
         >
-          Gegner: {opponentScore}
+          Opponent: {opponentScore}
         </div>
         <div className="text-sm text-zinc-500 dark:text-zinc-400">
-          Züge: {moves} | Paare: {matchedIndices.length / 2}/{totalPairs}
+          Moves: {moves} | Pairs: {matchedIndices.length / 2}/{totalPairs}
         </div>
       </div>
 
@@ -237,9 +237,9 @@ export function MultiplayerMemoryGame() {
         className={clsx(
           'mb-6 rounded-lg px-4 py-2 text-base font-medium',
           isGameOver
-            ? resultText?.includes('gewinnst')
+            ? resultText?.includes('win')
               ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400'
-              : resultText === 'Unentschieden!'
+              : resultText === "It's a tie!"
                 ? 'bg-zinc-100 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300'
                 : 'bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400'
             : isMismatchPhase
