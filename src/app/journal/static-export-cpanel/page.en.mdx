@@ -1,7 +1,3 @@
-import { JournalLayout } from '@/components/JournalLayout'
-
-export const dynamic = 'force-static'
-
 export const entry = {
   title: 'From Standalone to Static Export: Solving cPanel Process Limits',
   description:
@@ -11,13 +7,6 @@ export const entry = {
   tags: ['nextjs', 'cpanel', 'deployment', 'static-export', 'performance'],
   relatedApps: ['memory-game', 'tic-tac-toe'],
 }
-
-export const metadata = {
-  title: entry.title,
-  description: entry.description,
-}
-
-export default ({ children }) => <JournalLayout entry={entry}>{children}</JournalLayout>
 
 After adding the journal feature to this playground, the entire site went down on my shared hosting. 
 What followed was a debugging journey that ended with a much simpler and more reliable deployment -> Back to the roots.
@@ -62,7 +51,7 @@ const nextConfig = {
 }
 ```
 
-The results were dramatic:
+Die Ergebnisse waren deutlich:
 
 | | Standalone | Static Export |
 |---|---|---|

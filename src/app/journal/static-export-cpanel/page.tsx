@@ -9,7 +9,7 @@ const entry = {
   category: 'development',
   tags: ['nextjs', 'cpanel', 'deployment', 'static-export', 'performance'],
   relatedApps: ['memory-game', 'tic-tac-toe'],
-  slug: 'cPanel process limit fix',
+  slug: 'static-export-cpanel',
 }
 
 export const metadata = {
@@ -17,7 +17,7 @@ export const metadata = {
   description: entry.description,
 }
 
-export default function HydrationFixPage() {
+export default function StaticExportCpanelPage() {
   return (
     <JournalLayout entry={entry}>
       <MdxContent />

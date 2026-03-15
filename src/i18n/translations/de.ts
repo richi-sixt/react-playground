@@ -38,6 +38,22 @@ const de: Record<keyof typeof en, string> = {
     'Die gesuchte Seite konnte leider nicht gefunden werden.',
   'notFound.goHome': 'Zur Startseite',
 
+  // App detail titles & descriptions
+  'app.tic-tac-toe.title': 'Tic Tac Toe',
+  'app.tic-tac-toe.description':
+    'Klassisches Zwei-Spieler-Spiel mit Zughistorie und Zeitreise. Aufgebaut nach dem offiziellen React-Tutorial.',
+  'app.memory-game.title': 'Memory-Spiel',
+  'app.memory-game.description':
+    'Ein Karten-Memory-Spiel mit Umdreh-Animationen. Finde alle 6 passenden Paare in so wenigen Z\u00FCgen wie m\u00F6glich.',
+
+  // Journal detail titles & descriptions
+  'journal.hydration-fix.title': 'Hydration-Mismatch im Memory-Spiel beheben',
+  'journal.hydration-fix.description':
+    'Wie Math.random() SSR-Hydration-Fehler verursacht und die L\u00F6sung mit dem Mounted-Pattern.',
+  'journal.static-export-cpanel.title': 'Von Standalone zu Static Export: Lösung der cPanel Prozesslimiten',
+  'journal.static-export-cpanel.description':
+    'Wie ein Next.js Standalone-Server die Prozesslimiten auf Shared Hosting erreichte und warum Static Export die richtige Lösung war.',
+  
   // Tic Tac Toe (solo)
   'ttt.title': 'Tic Tac Toe',
   'ttt.description':

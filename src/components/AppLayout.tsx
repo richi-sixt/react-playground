@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { AppContext } from '@/app/providers'
 import { Container } from '@/components/Container'
 import { Prose } from '@/components/Prose'
-import { useTranslation } from '@/i18n'
+import { useTranslation, type TranslationKey } from '@/i18n'
 import { type AppWithSlug } from '@/lib/apps'
 import { type JournalEntryWithSlug } from '@/lib/journal'
 import { formatDate } from '@/lib/formatDate'
@@ -78,7 +78,7 @@ export function AppLayout({
           <article>
             <header className="flex flex-col">
               <h1 className="mt-6 text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-                {app.title}
+                {t(`app.${app.slug}.title` as TranslationKey)}
               </h1>
               <div className="mt-4 flex flex-wrap gap-2">
                 {app.tech.map((tech) => (
@@ -131,7 +131,7 @@ export function AppLayout({
                       className="group flex flex-col"
                     >
                       <span className="text-sm font-medium text-zinc-800 group-hover:text-violet-500 dark:text-zinc-200 dark:group-hover:text-violet-400">
-                        {entry.title}
+                        {t(`journal.${entry.slug}.title` as TranslationKey)}
                       </span>
                       <span className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
                         {formatDate(entry.date, locale)}

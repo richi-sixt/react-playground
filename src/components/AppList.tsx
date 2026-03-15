@@ -5,7 +5,7 @@ import clsx from 'clsx'
 
 import { Card } from '@/components/Card'
 import { formatDate } from '@/lib/formatDate'
-import { useTranslation } from '@/i18n'
+import { useTranslation, type TranslationKey } from '@/i18n'
 import { type AppWithSlug } from '@/lib/apps'
 
 type CategoryFilter = 'all' | 'games' | 'misc'
@@ -53,7 +53,7 @@ export function AppList({ apps }: { apps: AppWithSlug[] }) {
             >
               <Card className="md:col-span-3">
                 <Card.Title href={`/apps/${app.slug}`}>
-                  {app.title}
+                  {t(`app.${app.slug}.title` as TranslationKey)}
                 </Card.Title>
                 <Card.Eyebrow
                   as="time"
@@ -63,7 +63,7 @@ export function AppList({ apps }: { apps: AppWithSlug[] }) {
                 >
                   {formatDate(app.date, locale)}
                 </Card.Eyebrow>
-                <Card.Description>{app.description}</Card.Description>
+                <Card.Description>{t(`app.${app.slug}.description` as TranslationKey)}</Card.Description>
                 <div className="relative z-10 mt-4 flex flex-wrap gap-1">
                   {app.tech.map((tech) => (
                     <span

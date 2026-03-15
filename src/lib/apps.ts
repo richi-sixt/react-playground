@@ -22,7 +22,7 @@ async function importApp(appFilename: string): Promise<AppWithSlug> {
   }
 
   return {
-    slug: appFilename.replace(/(\/page)?\.mdx$/, ''),
+    slug: appFilename.replace(/(\/page)?\.en\.mdx$/, ''),
     ...app,
   }
 }
@@ -34,9 +34,9 @@ export async function getAllApps() {
     .filter(
       (e) =>
         e.isDirectory() &&
-        fs.existsSync(path.join(appsDir, e.name, 'page.mdx')),
+        fs.existsSync(path.join(appsDir, e.name, 'page.en.mdx')),
     )
-    .map((e) => `${e.name}/page.mdx`)
+    .map((e) => `${e.name}/page.en.mdx`)
 
   let apps = await Promise.all(appFilenames.map(importApp))
 

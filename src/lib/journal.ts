@@ -23,7 +23,7 @@ async function importEntry(
   }
 
   return {
-    slug: entryFilename.replace(/(\/page)?\.mdx$/, ''),
+    slug: entryFilename.replace(/(\/page)?\.en\.mdx$/, ''),
     ...entry,
   }
 }
@@ -35,9 +35,9 @@ export async function getAllJournalEntries() {
     .filter(
       (e) =>
         e.isDirectory() &&
-        fs.existsSync(path.join(journalDir, e.name, 'page.mdx')),
+        fs.existsSync(path.join(journalDir, e.name, 'page.en.mdx')),
     )
-    .map((e) => `${e.name}/page.mdx`)
+    .map((e) => `${e.name}/page.en.mdx`)
 
   let entries = await Promise.all(entryFilenames.map(importEntry))
 
