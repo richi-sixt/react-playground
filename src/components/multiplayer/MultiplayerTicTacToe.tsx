@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import clsx from 'clsx'
+import { useTranslation } from '@/i18n'
 import { GameLobby } from './GameLobby'
 import {
   subscribeToRoom,
@@ -61,6 +62,7 @@ function calculateWinner(squares: (string | null)[]): string | null {
 // ---- Main component ----
 
 export function MultiplayerTicTacToe() {
+  const { t } = useTranslation()
   const [room, setRoom] = useState<Room | null>(null)
   const [playerId, setPlayerId] = useState<string>('')
   const channelRef = useRef<RealtimeChannel | null>(null)
@@ -117,13 +119,13 @@ export function MultiplayerTicTacToe() {
   // Status text
   let statusText: string
   if (winner) {
-    statusText = winnerPlayerId === playerId ? 'Du gewinnst! 🎉' : 'Gegner gewinnt!'
+    statusText = winnerPlayerId === playerId ? t('mp.youWin') : t('mp.opponentWins')
   } else if (isDraw) {
-    statusText = 'Unentschieden!'
+    statusText = t('mp.draw')
   } else if (isMyTurn) {
-    statusText = `Dein Zug (${myMark})`
+    statusText = t('mp.ttt.yourTurnMark', { mark: myMark })
   } else {
-    statusText = 'Gegner ist dran…'
+    statusText = t('mp.opponentsTurn')
   }
 
   async function handleClick(i: number) {
@@ -182,7 +184,7 @@ export function MultiplayerTicTacToe() {
             ? 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400'
             : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400',
         )}>
-          Du: {myMark}
+          {t('mp.you')} {myMark}
         </div>
         <div className={clsx(
           'rounded-md px-3 py-1 text-sm font-medium',
@@ -190,7 +192,7 @@ export function MultiplayerTicTacToe() {
             ? 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400'
             : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400',
         )}>
-          Gegner: {isPlayerA ? 'O' : 'X'}
+          {t('mp.opponent')} {isPlayerA ? 'O' : 'X'}
         </div>
       </div>
 

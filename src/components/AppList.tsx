@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState } from 'react'
@@ -6,12 +5,20 @@ import clsx from 'clsx'
 
 import { Card } from '@/components/Card'
 import { formatDate } from '@/lib/formatDate'
+import { useTranslation } from '@/i18n'
 import { type AppWithSlug } from '@/lib/apps'
 
 type CategoryFilter = 'all' | 'games' | 'misc'
 
+const categoryKeys = {
+  all: 'filter.all',
+  games: 'filter.games',
+  misc: 'filter.misc',
+} as const
+
 export function AppList({ apps }: { apps: AppWithSlug[] }) {
   let [category, setCategory] = useState<CategoryFilter>('all')
+  let { t, locale } = useTranslation()
 
   let filtered =
     category === 'all'
@@ -32,7 +39,7 @@ export function AppList({ apps }: { apps: AppWithSlug[] }) {
                 : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700',
             )}
           >
-            {cat === 'all' ? 'All' : cat === 'games' ? 'Games' : 'Misc'}
+            {t(categoryKeys[cat])}
           </button>
         ))}
       </div>
@@ -54,27 +61,27 @@ export function AppList({ apps }: { apps: AppWithSlug[] }) {
                   className="md:hidden"
                   decorate
                 >
-                  {formatDate(app.date)}
+                  {formatDate(app.date, locale)}
                 </Card.Eyebrow>
                 <Card.Description>{app.description}</Card.Description>
                 <div className="relative z-10 mt-4 flex flex-wrap gap-1">
-                  {app.tech.map((t) => (
+                  {app.tech.map((tech) => (
                     <span
-                      key={t}
+                      key={tech}
                       className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
                     >
-                      {t}
+                      {tech}
                     </span>
                   ))}
                 </div>
-                <Card.Cta>Read more</Card.Cta>
+                <Card.Cta>{t('card.readMore')}</Card.Cta>
               </Card>
               <Card.Eyebrow
                 as="time"
                 dateTime={app.date}
                 className="mt-1 max-md:hidden"
               >
-                {formatDate(app.date)}
+                {formatDate(app.date, locale)}
               </Card.Eyebrow>
             </article>
           ))}

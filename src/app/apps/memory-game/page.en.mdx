@@ -1,8 +1,3 @@
-
-import { AppDetailLayout } from '@/components/AppDetailLayout'
-
-export const dynamic = 'force-static'
-
 export const app = {
   title: 'Memory Game',
   description:
@@ -12,13 +7,6 @@ export const app = {
   date: '2025-03-14',
   category: 'games',
 }
-
-export const metadata = {
-  title: app.title,
-  description: app.description,
-}
-
-export default ({ children }) => <AppDetailLayout app={app}>{children}</AppDetailLayout>
 
 A memory card game where you flip cards to find matching pairs, built with React.
 

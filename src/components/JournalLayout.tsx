@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { AppContext } from '@/app/providers'
 import { Container } from '@/components/Container'
 import { Prose } from '@/components/Prose'
+import { useTranslation } from '@/i18n'
 import { formatDate } from '@/lib/formatDate'
 import { type JournalEntryWithSlug } from '@/lib/journal'
 
@@ -33,6 +34,7 @@ export function JournalLayout({
 }) {
   let router = useRouter()
   let { previousPathname } = useContext(AppContext)
+  let { locale } = useTranslation()
 
   return (
     <Container className="mt-16 lg:mt-32">
@@ -55,7 +57,7 @@ export function JournalLayout({
                 className="flex items-center text-base text-zinc-400 dark:text-zinc-500"
               >
                 <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-500" />
-                <span className="ml-3">{formatDate(entry.date)}</span>
+                <span className="ml-3">{formatDate(entry.date, locale)}</span>
               </time>
               <h1 className="mt-6 text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
                 {entry.title}

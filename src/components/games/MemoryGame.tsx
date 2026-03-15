@@ -3,6 +3,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import clsx from 'clsx'
+import { useTranslation } from '@/i18n'
 
 interface Card {
   id: number
@@ -38,6 +39,7 @@ function shuffleDeck(cards: Card[]): Card[] {
 }
 
 export function MemoryGame() {
+  let { t } = useTranslation()
   // Start with empty deck to avoid hydration mismatch — shuffled deck
   // is only created client-side in useEffect.
   const [cards, setCards] = useState<Card[]>([])
@@ -110,22 +112,22 @@ export function MemoryGame() {
     <div className="flex flex-col items-center">
       <div className="mb-6 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
         <div className="text-lg font-medium text-zinc-800 dark:text-zinc-200">
-          Moves: {moves}
+          {t('memory.moves', { count: moves })}
         </div>
         <div className="text-lg font-medium text-zinc-800 dark:text-zinc-200">
-          Pairs: {matchedPairs} / {CARD_IMAGES.length}
+          {t('memory.pairs', { matched: matchedPairs, total: CARD_IMAGES.length })}
         </div>
         <button
           onClick={handleNewGame}
           className="rounded-md bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
         >
-          New Game
+          {t('memory.newGame')}
         </button>
       </div>
 
       {isGameWon && (
         <div className="mb-6 rounded-lg bg-green-50 px-6 py-3 text-lg font-semibold text-green-700 dark:bg-green-900/20 dark:text-green-400">
-          You won in {moves} moves!
+          {t('memory.youWon', { moves })}
         </div>
       )}
 

@@ -1,8 +1,3 @@
-
-import { JournalLayout } from '@/components/JournalLayout'
-
-export const dynamic = 'force-static'
-
 export const entry = {
   title: 'Fixing Hydration Mismatch in Memory Game',
   description:
@@ -12,13 +7,6 @@ export const entry = {
   tags: ['react', 'ssr', 'hydration', 'nextjs'],
   relatedApps: ['memory-game'],
 }
-
-export const metadata = {
-  title: entry.title,
-  description: entry.description,
-}
-
-export default ({ children }) => <JournalLayout entry={entry}>{children}</JournalLayout>
 
 When building the Memory Game, I ran into a persistent React hydration mismatch error that took some debugging to resolve.
 

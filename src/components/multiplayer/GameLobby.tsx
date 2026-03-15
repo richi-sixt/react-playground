@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { getPlayerId } from '@/lib/player'
+import { useTranslation } from '@/i18n'
 import {
   createRoom,
   findRoomByCode,
@@ -25,6 +26,7 @@ export function GameLobby({
   initialGameState,
   onRoomReady,
 }: GameLobbyProps) {
+  const { t } = useTranslation()
   const [mode, setMode] = useState<LobbyMode>('choice')
   const [code, setCode] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -40,7 +42,7 @@ export function GameLobby({
       setWaitingRoom(room)
       setMode('waiting')
     } catch (err) {
-      setError('Room could not be created. Please try again.')
+      setError(t('mp.error.createRoom'))
       console.error('Create room error:', err)
     } finally {
       setIsLoading(false)
@@ -49,7 +51,7 @@ export function GameLobby({
 
   async function handleJoinRoom() {
     if (code.length !== 6) {
-      setError('Please enter a 6-digit code.')
+      setError(t('mp.error.invalidCode'))
       return
     }
 
@@ -58,17 +60,17 @@ export function GameLobby({
     try {
       const room = await findRoomByCode(code)
       if (!room) {
-        setError('Room not found. Check the code.')
+        setError(t('mp.error.roomNotFound'))
         setIsLoading(false)
         return
       }
       if (room.game_type !== gameType) {
-        setError('This room is for a different game.')
+        setError(t('mp.error.wrongGame'))
         setIsLoading(false)
         return
       }
       if (room.status !== 'waiting') {
-        setError('This room is already full or the game has started.')
+        setError(t('mp.error.roomFull'))
         setIsLoading(false)
         return
       }
@@ -77,7 +79,7 @@ export function GameLobby({
       const updatedRoom = await joinRoom(room.id, playerId, room.player_a)
       onRoomReady(updatedRoom, playerId)
     } catch (err) {
-      setError('Failed to join. Please try again.')
+      setError(t('mp.error.joinFailed'))
       console.error('Join room error:', err)
     } finally {
       setIsLoading(false)
@@ -104,14 +106,14 @@ export function GameLobby({
         {mode === 'choice' && (
           <div className="flex flex-col gap-4">
             <h2 className="text-center text-lg font-semibold text-zinc-800 dark:text-zinc-200">
-              Multiplayer
+              {t('mp.multiplayer')}
             </h2>
             <button
               onClick={handleCreateRoom}
               disabled={isLoading}
               className="rounded-lg bg-violet-500 px-6 py-3 text-base font-medium text-white transition hover:bg-violet-400 disabled:opacity-50 dark:bg-violet-600 dark:hover:bg-violet-500"
             >
-              {isLoading ? 'Creating…' : 'New Room'}
+              {isLoading ? t('mp.creating') : t('mp.newRoom')}
             </button>
             <button
               onClick={() => {
@@ -120,7 +122,7 @@ export function GameLobby({
               }}
               className="rounded-lg bg-zinc-100 px-6 py-3 text-base font-medium text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600"
             >
-              Join room
+              {t('mp.joinRoom')}
             </button>
           </div>
         )}
@@ -128,7 +130,7 @@ export function GameLobby({
         {mode === 'join' && (
           <div className="flex flex-col gap-4">
             <h2 className="text-center text-lg font-semibold text-zinc-800 dark:text-zinc-200">
-              Join room
+              {t('mp.joinRoom')}
             </h2>
             <input
               type="text"
@@ -137,7 +139,7 @@ export function GameLobby({
                 setCode(e.target.value.toUpperCase().slice(0, 6))
                 setError(null)
               }}
-              placeholder="Join room"
+              placeholder={t('mp.enterCode')}
               maxLength={6}
               className="rounded-lg border border-zinc-300 bg-white px-4 py-3 text-center font-mono text-2xl font-bold tracking-[0.2em] text-zinc-900 placeholder:text-zinc-400 placeholder:tracking-normal placeholder:text-base placeholder:font-normal focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100 dark:placeholder:text-zinc-500"
               autoFocus
@@ -147,7 +149,7 @@ export function GameLobby({
               disabled={isLoading || code.length !== 6}
               className="rounded-lg bg-violet-500 px-6 py-3 text-base font-medium text-white transition hover:bg-violet-400 disabled:opacity-50 dark:bg-violet-600 dark:hover:bg-violet-500"
             >
-              {isLoading ? 'Joining…' : 'Join'}
+              {isLoading ? t('mp.joining') : t('mp.join')}
             </button>
             <button
               onClick={() => {
@@ -157,7 +159,7 @@ export function GameLobby({
               }}
               className="text-sm text-zinc-500 transition hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
             >
-              ← Back
+              {t('mp.back')}
             </button>
           </div>
         )}

@@ -1,0 +1,34 @@
+Beim Bau des Memory-Spiels bin ich auf einen hartnäckigen React-Hydration-Mismatch-Fehler gestoßen, der einiges an Debugging erforderte.
+
+## Das Problem
+
+Das Memory-Spiel mischt die Karten beim Laden mit `Math.random()`. Da Next.js Komponenten zuerst auf dem Server rendert, erzeugt der Server eine zufällige Reihenfolge, während der Client eine andere generiert. React erkennt den Unterschied zwischen dem server-gerenderten HTML und dem client-gerenderten DOM und gibt Hydration-Fehler aus.
+
+## Was ich versucht habe
+
+Mein erster Ansatz war, die Deck-Erstellung in eine deterministische `createDeck()`-Funktion (als initialer `useState`-Wert) und eine `shuffleDeck()`-Funktion aufzuteilen, die in `useEffect` aufgerufen wird. Die Idee war, dass Server und Client mit der gleichen deterministischen Reihenfolge starten und das Mischen erst nach dem Mount passiert.
+
+Das hat nicht vollständig funktioniert, weil der Dev-Server die vorherige SSR-Ausgabe mit dem alten gemischten Deck gecacht hat.
+
+## Die Lösung
+
+Die Lösung war das **Empty-Initial-State-Pattern**: `useState` mit einem leeren Array initialisieren, während des SSR Platzhalter-Karten (verdeckt) rendern und das gemischte Deck erst auf dem Client in `useEffect` befüllen.
+
+```typescript
+const [cards, setCards] = useState<Card[]>([])
+
+useEffect(() => {
+  setCards(shuffleDeck(createDeck()))
+}, [])
+```
+
+Da alle Karten verdeckt starten (mit "?" angezeigt), sieht der Benutzer keinen visuellen Unterschied zwischen Platzhalter und echten Karten. Der Hydration-Mismatch wird vollständig eliminiert, weil Server und Client dasselbe leere Platzhalter-Raster rendern.
+
+## Wichtigste Erkenntnis
+
+Immer wenn du `Math.random()`, `Date.now()` oder andere nicht-deterministische Werte in einer server-gerenderten React-Komponente verwendest, musst du diese Logik in einen client-seitigen `useEffect` verschieben. Das sicherste Pattern ist, auf dem Server einen deterministischen Platzhalter zu rendern und den dynamischen Inhalt erst nach dem Mount einzufügen.
+
+## Ressourcen
+
+- [React hydration error](https://nextjs.org/docs/messages/react-hydration-error)
+- [hydrateRoot](https://react.dev/reference/react-dom/client/hydrateRoot)

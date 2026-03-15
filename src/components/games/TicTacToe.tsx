@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslation } from '@/i18n'
 
 interface SquareProps {
   value: string | null
@@ -25,6 +26,8 @@ interface BoardProps {
 }
 
 function Board({ xIsNext, squares, onPlay }: BoardProps) {
+  let { t } = useTranslation()
+
   function handleClick(i: number): void {
     if (squares[i] || calculateWinner(squares)) {
       return
@@ -36,8 +39,8 @@ function Board({ xIsNext, squares, onPlay }: BoardProps) {
 
   const winner = calculateWinner(squares)
   const status = winner
-    ? `Winner: ${winner}`
-    : `Next player: ${xIsNext ? 'X' : 'O'}`
+    ? t('ttt.winner', { mark: winner })
+    : t('ttt.nextPlayer', { mark: xIsNext ? 'X' : 'O' })
 
   return (
     <>
@@ -63,6 +66,7 @@ function Board({ xIsNext, squares, onPlay }: BoardProps) {
 }
 
 export function TicTacToe() {
+  let { t } = useTranslation()
   const [history, setHistory] = useState<(string | null)[][]>([
     Array(9).fill(null),
   ])
@@ -81,7 +85,8 @@ export function TicTacToe() {
   }
 
   const moves = history.map((_squares, move) => {
-    const description = move > 0 ? `Go to move #${move}` : 'Restart game'
+    const description =
+      move > 0 ? t('ttt.goToMove', { move }) : t('ttt.restart')
     return (
       <li key={move}>
         <button
@@ -99,7 +104,7 @@ export function TicTacToe() {
       <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       <div className="mt-6">
         <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-          Move History
+          {t('ttt.moveHistory')}
         </h3>
         <ol className="mt-3 space-y-2">{moves}</ol>
       </div>

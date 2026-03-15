@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { AppContext } from '@/app/providers'
 import { Container } from '@/components/Container'
 import { Prose } from '@/components/Prose'
+import { useTranslation } from '@/i18n'
 import { type AppWithSlug } from '@/lib/apps'
 import { type JournalEntryWithSlug } from '@/lib/journal'
 import { formatDate } from '@/lib/formatDate'
@@ -58,6 +59,7 @@ export function AppLayout({
 }) {
   let router = useRouter()
   let { previousPathname } = useContext(AppContext)
+  let { t, locale } = useTranslation()
 
   return (
     <Container className="mt-16 lg:mt-32">
@@ -79,12 +81,12 @@ export function AppLayout({
                 {app.title}
               </h1>
               <div className="mt-4 flex flex-wrap gap-2">
-                {app.tech.map((t) => (
+                {app.tech.map((tech) => (
                   <span
-                    key={t}
+                    key={tech}
                     className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200"
                   >
-                    {t}
+                    {tech}
                   </span>
                 ))}
               </div>
@@ -95,7 +97,7 @@ export function AppLayout({
                     className="flex items-center text-sm font-medium text-violet-500 hover:text-violet-600"
                   >
                     <LinkIcon className="mr-2 h-5 w-5 flex-none" />
-                    Go to app
+                    {t('appDetail.goToApp')}
                   </a>
                 )}
                 {app.github && (
@@ -106,7 +108,7 @@ export function AppLayout({
                     className="flex items-center text-sm font-medium text-violet-500 hover:text-violet-600"
                   >
                     <GitHubIcon className="mr-2 h-5 w-5 flex-none fill-current" />
-                    View on GitHub
+                    {t('appDetail.viewOnGithub')}
                   </a>
                 )}
               </div>
@@ -119,7 +121,7 @@ export function AppLayout({
           {journalEntries && journalEntries.length > 0 && (
             <section className="mt-16 border-t border-zinc-100 pt-10 dark:border-zinc-700/40">
               <h2 className="text-lg font-semibold text-zinc-800 dark:text-zinc-100">
-                Related Journal Entries
+                {t('appDetail.relatedJournal')}
               </h2>
               <ul className="mt-4 space-y-4">
                 {journalEntries.map((entry) => (
@@ -132,7 +134,7 @@ export function AppLayout({
                         {entry.title}
                       </span>
                       <span className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                        {formatDate(entry.date)}
+                        {formatDate(entry.date, locale)}
                       </span>
                     </Link>
                   </li>

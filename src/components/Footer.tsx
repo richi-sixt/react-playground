@@ -1,6 +1,11 @@
+'use client'
+
 import { ContainerInner, ContainerOuter } from '@/components/Container'
+import { useTranslation } from '@/i18n'
 
 export function Footer() {
+  let { t } = useTranslation()
+
   return (
     <footer className="mt-32 flex-none">
       <ContainerOuter>
@@ -8,8 +13,8 @@ export function Footer() {
           <ContainerInner>
             <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
               <p className="text-sm text-zinc-400 dark:text-zinc-500">
-                &copy; {new Date().getFullYear()} Rüchan Sixt. Built with
-                Next.js &amp; React.
+                &copy; {new Date().getFullYear()} R&uuml;chan Sixt.{' '}
+                {t('footer.builtWith')}
               </p>
             </div>
           </ContainerInner>

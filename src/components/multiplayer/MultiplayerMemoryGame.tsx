@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import clsx from 'clsx'
+import { useTranslation } from '@/i18n'
 import { GameLobby } from './GameLobby'
 import {
   subscribeToRoom,
@@ -50,6 +51,7 @@ function createInitialMemoryState(): MemoryGameState {
 // ---- Main component ----
 
 export function MultiplayerMemoryGame() {
+  const { t } = useTranslation()
   const [room, setRoom] = useState<Room | null>(null)
   const [playerId, setPlayerId] = useState<string>('')
   const channelRef = useRef<RealtimeChannel | null>(null)
@@ -113,25 +115,30 @@ export function MultiplayerMemoryGame() {
   const isMismatchPhase = room.current_turn === null && !isGameOver && room.status === 'playing'
 
   // Determine winner
-  let resultText: string | null = null
+  const myScore = isPlayerA ? scoreA : scoreB
+  const opponentScore = isPlayerA ? scoreB : scoreA
+  let result: 'win' | 'lose' | 'draw' | null = null
   if (isGameOver) {
-    const myScore = isPlayerA ? scoreA : scoreB
-    const opponentScore = isPlayerA ? scoreB : scoreA
-    if (myScore > opponentScore) resultText = 'You win! 🎉'
-    else if (myScore < opponentScore) resultText = 'Opponent wins!'
-    else resultText = 'It’s a tie!'
+    if (myScore > opponentScore) result = 'win'
+    else if (myScore < opponentScore) result = 'lose'
+    else result = 'draw'
   }
 
   // Status text
   let statusText: string
   if (isGameOver) {
-    statusText = resultText!
+    statusText =
+      result === 'win'
+        ? t('mp.youWin')
+        : result === 'lose'
+          ? t('mp.opponentWins')
+          : t('mp.draw')
   } else if (isMismatchPhase) {
-    statusText = 'No match…'
+    statusText = t('mp.memory.noMatch')
   } else if (isMyTurn) {
-    statusText = 'Your turn'
+    statusText = t('mp.yourTurn')
   } else {
-    statusText = 'Opponent’s turn…'
+    statusText = t('mp.opponentsTurn')
   }
 
   async function handleCardClick(index: number) {
@@ -201,9 +208,6 @@ export function MultiplayerMemoryGame() {
     }
   }
 
-  const myScore = isPlayerA ? scoreA : scoreB
-  const opponentScore = isPlayerA ? scoreB : scoreA
-
   return (
     <div className="flex flex-col items-center">
       {/* Score & status */}
@@ -216,7 +220,7 @@ export function MultiplayerMemoryGame() {
               : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400',
           )}
         >
-          You: {myScore}
+          {t('mp.you')} {myScore}
         </div>
         <div
           className={clsx(
@@ -226,10 +230,10 @@ export function MultiplayerMemoryGame() {
               : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400',
           )}
         >
-          Opponent: {opponentScore}
+          {t('mp.opponent')} {opponentScore}
         </div>
         <div className="text-sm text-zinc-500 dark:text-zinc-400">
-          Moves: {moves} | Pairs: {matchedIndices.length / 2}/{totalPairs}
+          {t('mp.memory.moves', { count: moves })} | {t('mp.memory.pairs', { matched: matchedIndices.length / 2, total: totalPairs })}
         </div>
       </div>
 
@@ -237,9 +241,9 @@ export function MultiplayerMemoryGame() {
         className={clsx(
           'mb-6 rounded-lg px-4 py-2 text-base font-medium',
           isGameOver
-            ? resultText?.includes('win')
+            ? result === 'win'
               ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400'
-              : resultText === "It's a tie!"
+              : result === 'draw'
                 ? 'bg-zinc-100 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300'
                 : 'bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400'
             : isMismatchPhase

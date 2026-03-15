@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState } from 'react'
@@ -6,10 +5,12 @@ import clsx from 'clsx'
 
 import { Card } from '@/components/Card'
 import { formatDate } from '@/lib/formatDate'
+import { useTranslation } from '@/i18n'
 import { type JournalEntryWithSlug } from '@/lib/journal'
 
 export function JournalList({ entries }: { entries: JournalEntryWithSlug[] }) {
   let [category, setCategory] = useState('all')
+  let { t, locale } = useTranslation()
 
   let categories = [
     'all',
@@ -35,7 +36,7 @@ export function JournalList({ entries }: { entries: JournalEntryWithSlug[] }) {
                 : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700',
             )}
           >
-            {cat === 'all' ? 'All' : cat}
+            {cat === 'all' ? t('filter.all') : cat}
           </button>
         ))}
       </div>
@@ -57,7 +58,7 @@ export function JournalList({ entries }: { entries: JournalEntryWithSlug[] }) {
                   className="md:hidden"
                   decorate
                 >
-                  {formatDate(entry.date)}
+                  {formatDate(entry.date, locale)}
                 </Card.Eyebrow>
                 <Card.Description>{entry.description}</Card.Description>
                 <div className="relative z-10 mt-4 flex flex-wrap gap-1">
@@ -73,14 +74,14 @@ export function JournalList({ entries }: { entries: JournalEntryWithSlug[] }) {
                     </span>
                   ))}
                 </div>
-                <Card.Cta>Read more</Card.Cta>
+                <Card.Cta>{t('card.readMore')}</Card.Cta>
               </Card>
               <Card.Eyebrow
                 as="time"
                 dateTime={entry.date}
                 className="mt-1 max-md:hidden"
               >
-                {formatDate(entry.date)}
+                {formatDate(entry.date, locale)}
               </Card.Eyebrow>
             </article>
           ))}
