@@ -16,7 +16,7 @@ Der cPanel‑Fehler war eindeutig: „Unable to fork — User has reached resour
 Erster Verdacht:  <a href="https://www.npmjs.com/package/fast-glob" target="_blank" rel="noopener noreferrer">`fast-glob`</a>, das verwendet wird, um App‑ und Journal‑MDX‑Dateien während des Builds zu entdecken, könnte zur Laufzeit Child‑Prozesse starten.
 ch ersetzte es durch das in Node integrierte <a href="https://www.geeksforgeeks.org/node-js/node-js-fs-readdirsync-method/" target="_blank" rel="noopener noreferrer">`fs.readdirSync`</a> — weniger Abhängigkeiten, keine Child‑Prozesse.
 Ein Blick auf die Build‑Ausgabe zeigte jedoch, dass alle Seiten bereits mit  ○  (Static) markiert waren.
-Der Austausch von glob war zwar eine gute Aufräummaßnahme, aber nicht die Ursache — diese Funktionen liefen nur während des Builds, nicht auf dem Server.
+Der Austausch von glob war zwar eine gute Aufräummassnahme, aber nicht die Ursache — diese Funktionen liefen nur während des Builds, nicht auf dem Server.
 
 ### Versuch 2: Das Standalone‑Bundle verschlanken
 
