@@ -1,0 +1,3 @@
+[submodule "journal"]
+	path = journal
+	url = git@github.com:richi-sixt/playground-journal-private.git

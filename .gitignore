@@ -14,9 +14,6 @@
 /build
 /deploy
 
-# real journal entries (not tracked, only journal-examples/ is in git)
-/journal/
-
 # generated journal entry pages (copied by scripts/prepare-content.mjs)
 /src/app/journal/*/
 

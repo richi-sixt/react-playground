@@ -2,13 +2,13 @@ import { JournalLayout } from '@/components/JournalLayout'
 import { MdxContent } from './MdxContent'
 
 const entry = {
-  title: 'Fixing Hydration Mismatch in Memory Game',
+  title: 'Title of the journal entry',
   description:
-    'How Math.random() causes SSR hydration errors and the solution using the mounted pattern.',
+    'Short-Description of the journal entry',
   date: '2025-03-17',
   category: 'development',
-  tags: ['react', 'ssr', 'hydration', 'nextjs'],
-  relatedApps: ['memory-game'],
+  tags: ['react', 'ssr', 'nextjs'],
+  relatedApps: ['relatedApps-Name'],
   slug: 'hydration-fix',
 }
 

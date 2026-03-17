@@ -53,6 +53,10 @@ const de: Record<keyof typeof en, string> = {
   'journal.static-export-cpanel.title': 'Von Standalone zu Static Export: Lösung der cPanel Prozesslimiten',
   'journal.static-export-cpanel.description':
     'Wie ein Next.js Standalone-Server die Prozesslimiten auf Shared Hosting erreichte und warum Static Export die richtige Lösung war.',
+  'journal.private-submodules.title': 'Privater Inhalt mit Git Submodules',
+  'journal.private-submodules.description':
+    'Wie man ein öffentliches Repository beibehält und gleichzeitig private Inhalte wie Tagebucheinträge oder Portfolio-Daten mit Git-Submodulen verwaltet.',
+
   
   // Tic Tac Toe (solo)
   'ttt.title': 'Tic Tac Toe',

@@ -51,6 +51,9 @@ const en = {
   'journal.static-export-cpanel.title': 'From Standalone to Static Export: Solving cPanel Process Limits',
   'journal.static-export-cpanel.description':
     'How a Next.js standalone server hit process limits on shared hosting and why static export was the right solution.',
+  'journal.private-submodules.title': 'Private Content with Git Submodules',
+  'journal.private-submodules.description':
+    'How to keep a public repo while managing private content like journal entries or portfolio data using Git submodules.',
 
   // Tic Tac Toe (solo)
   'ttt.title': 'Tic Tac Toe',
