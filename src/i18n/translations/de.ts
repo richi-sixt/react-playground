@@ -1,6 +1,6 @@
 import type en from './en'
 
-const de: Record<keyof typeof en, string> = {
+const de: Record<keyof typeof en, string> & Record<string, string> = {
   // Navigation
   'nav.home': 'Startseite',
   'nav.journal': 'Journal',

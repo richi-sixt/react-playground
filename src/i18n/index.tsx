@@ -14,7 +14,7 @@ import de from './translations/de'
 type TranslationKey = keyof typeof en
 type Locale = 'en' | 'de'
 
-const translations: Record<Locale, Record<TranslationKey, string>> = { en, de }
+const translations: Record<Locale, Record<string, string>> = { en, de }
 
 const STORAGE_KEY = 'react-playground-lang'
 

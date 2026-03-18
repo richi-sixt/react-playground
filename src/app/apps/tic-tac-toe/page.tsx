@@ -1,15 +1,8 @@
 import { AppDetailLayout } from '@/components/AppDetailLayout'
 import { MdxContent } from './MdxContent'
+import { app as baseApp } from './page.en.mdx'
 
-const app = {
-  title: 'Tic Tac Toe',
-  description:
-    'Classic two-player game with move history and time travel. Built following the official React tutorial.',
-  tech: ['React', 'TypeScript', 'useState'],
-  url: '/apps/tic-tac-toe/play/',
-  date: '2025-03-02',
-  category: 'games' as const,
-}
+const app = { ...baseApp, slug: 'tic-tac-toe' }
 
 export const metadata = {
   title: app.title,

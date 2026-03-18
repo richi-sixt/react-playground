@@ -36,25 +36,6 @@ const en = {
     "Sorry, we couldn't find the page you're looking for.",
   'notFound.goHome': 'Go back home',
 
-  // App detail titles & descriptions
-  'app.tic-tac-toe.title': 'Tic Tac Toe',
-  'app.tic-tac-toe.description':
-    'Classic two-player game with move history and time travel. Built following the official React tutorial.',
-  'app.memory-game.title': 'Memory Game',
-  'app.memory-game.description':
-    'A card-matching memory game with flip animations. Find all 6 matching pairs in as few moves as possible.',
-
-  // Journal detail titles & descriptions
-  'journal.hydration-fix.title': 'Fixing Hydration Mismatch in Memory Game',
-  'journal.hydration-fix.description':
-    'How Math.random() causes SSR hydration errors and the solution using the mounted pattern.',
-  'journal.static-export-cpanel.title': 'From Standalone to Static Export: Solving cPanel Process Limits',
-  'journal.static-export-cpanel.description':
-    'How a Next.js standalone server hit process limits on shared hosting and why static export was the right solution.',
-  'journal.private-submodules.title': 'Private Content with Git Submodules',
-  'journal.private-submodules.description':
-    'How to keep a public repo while managing private content like journal entries or portfolio data using Git submodules.',
-
   // Tic Tac Toe (solo)
   'ttt.title': 'Tic Tac Toe',
   'ttt.description':

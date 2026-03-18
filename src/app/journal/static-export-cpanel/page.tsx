@@ -1,16 +1,8 @@
 import { JournalLayout } from '@/components/JournalLayout'
 import { MdxContent } from './MdxContent'
+import { entry as baseEntry } from './page.en.mdx'
 
-const entry = {
-  title: 'From Standalone to Static Export: Solving cPanel Process Limits',
-  description:
-    'How a Next.js standalone server hit process limits on shared hosting and why static export was the right solution.',
-  date: '2026-03-14',
-  category: 'development',
-  tags: ['nextjs', 'cpanel', 'deployment', 'static-export', 'performance'],
-  relatedApps: ['memory-game', 'tic-tac-toe'],
-  slug: 'static-export-cpanel',
-}
+const entry = { ...baseEntry, slug: 'static-export-cpanel' }
 
 export const metadata = {
   title: entry.title,

@@ -5,8 +5,9 @@ import clsx from 'clsx'
 
 import { Card } from '@/components/Card'
 import { formatDate } from '@/lib/formatDate'
-import { useTranslation, type TranslationKey } from '@/i18n'
+import { useTranslation } from '@/i18n'
 import { type JournalEntryWithSlug } from '@/lib/journal'
+import { te } from '@/lib/translatedEntry'
 
 export function JournalList({ entries }: { entries: JournalEntryWithSlug[] }) {
   let [category, setCategory] = useState('all')
@@ -50,7 +51,7 @@ export function JournalList({ entries }: { entries: JournalEntryWithSlug[] }) {
             >
               <Card className="md:col-span-3">
                 <Card.Title href={`/journal/${entry.slug}/`}>
-                  {t(`journal.${entry.slug}.title` as TranslationKey)}
+                  {te(t, `journal.${entry.slug}.title`, entry.title)}
                 </Card.Title>
                 <Card.Eyebrow
                   as="time"
@@ -60,7 +61,7 @@ export function JournalList({ entries }: { entries: JournalEntryWithSlug[] }) {
                 >
                   {formatDate(entry.date, locale)}
                 </Card.Eyebrow>
-                <Card.Description>{t(`journal.${entry.slug}.description` as TranslationKey)}</Card.Description>
+                <Card.Description>{te(t, `journal.${entry.slug}.description`, entry.description)}</Card.Description>
                 <div className="relative z-10 mt-4 flex flex-wrap gap-1">
                   <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
                     {entry.category}

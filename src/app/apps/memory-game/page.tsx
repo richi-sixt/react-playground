@@ -1,15 +1,8 @@
 import { AppDetailLayout } from '@/components/AppDetailLayout'
 import { MdxContent } from './MdxContent'
+import { app as baseApp } from './page.en.mdx'
 
-const app = {
-  title: 'Memory Game',
-  description:
-    'A card-matching memory game with flip animations. Find all 6 matching pairs in as few moves as possible.',
-  tech: ['React', 'TypeScript', 'useState', 'useEffect'],
-  url: '/apps/memory-game/play/',
-  date: '2025-03-14',
-  category: 'games' as const,
-}
+const app = { ...baseApp, slug: 'memory-game' }
 
 export const metadata = {
   title: app.title,
