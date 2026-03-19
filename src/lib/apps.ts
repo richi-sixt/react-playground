@@ -8,7 +8,7 @@ interface App {
   url?: string
   github?: string
   date: string
-  category: 'games' | 'misc'
+  category: 'games' | 'tools' | 'web' | 'misc'
 }
 
 export interface AppWithSlug extends App {

@@ -1,11 +1,12 @@
 {
-  "name": "react-playground",
+  "name": "playground",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "prepare-content": "node scripts/prepare-content.mjs",
-    "dev": "npm run prepare-content && next dev",
-    "build": "npm run prepare-content && next build",
+    "export-projects": "node scripts/export-projects.mjs",
+    "dev": "npm run prepare-content && npm run export-projects && next dev",
+    "build": "npm run prepare-content && npm run export-projects && next build",
     "start": "next start",
     "lint": "next lint"
   },

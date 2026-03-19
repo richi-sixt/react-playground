@@ -16,7 +16,7 @@ type Locale = 'en' | 'de'
 
 const translations: Record<Locale, Record<string, string>> = { en, de }
 
-const STORAGE_KEY = 'react-playground-lang'
+const STORAGE_KEY = 'playground-lang'
 
 function getInitialLocale(): Locale {
   if (typeof window === 'undefined') return 'en'

@@ -6,14 +6,16 @@ const en = {
   'nav.navigation': 'Navigation',
 
   // Home page
-  'home.title': 'React Playground',
+  'home.title': 'Playground',
   'home.description':
-    'A collection of apps, games, experiments, and demos built with React. Explore different React patterns and features.',
+    'A collection of apps, games, experiments, and demos. Explore different projects, patterns, and features.',
   'home.apps': 'Apps',
 
   // App list
   'filter.all': 'All',
   'filter.games': 'Games',
+  'filter.tools': 'Tools',
+  'filter.web': 'Web',
   'filter.misc': 'Misc',
   'card.readMore': 'Read more',
 
@@ -25,7 +27,7 @@ const en = {
   // Journal
   'journal.title': 'Journal',
   'journal.description':
-    'Documenting my learnings and journey with React. Notes on patterns, bugs, and discoveries along the way.',
+    'Documenting my learnings and journey. Notes on patterns, bugs, and discoveries along the way.',
 
   // Footer
   'footer.builtWith': 'Built with Next.js & React.',

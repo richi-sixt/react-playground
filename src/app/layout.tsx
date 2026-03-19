@@ -7,11 +7,11 @@ import '@/styles/tailwind.css'
 
 export const metadata: Metadata = {
   title: {
-    template: '%s - React Playground',
-    default: 'React Playground - Explore React Features & Games',
+    template: '%s - Playground',
+    default: 'Playground - Explore Projects, Apps & Games',
   },
   description:
-    'A playground for exploring React features, patterns, and building small games.',
+    'A playground for exploring projects, apps, games, and experiments.',
 }
 
 export default function RootLayout({

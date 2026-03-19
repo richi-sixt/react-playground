@@ -76,15 +76,25 @@ export function JournalLayout({
                   </span>
                 ))}
               </div>
-              {entry.relatedApps && entry.relatedApps.length > 0 && (
+              {((entry.relatedApps && entry.relatedApps.length > 0) ||
+                (entry.relatedWork && entry.relatedWork.length > 0)) && (
                 <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
-                  {entry.relatedApps.map((appSlug) => (
+                  {entry.relatedApps?.map((appSlug) => (
                     <Link
                       key={appSlug}
                       href={`/apps/${appSlug}/`}
                       className="text-sm font-medium text-violet-500 hover:text-violet-600"
                     >
                       → {appSlug}
+                    </Link>
+                  ))}
+                  {entry.relatedWork?.map((workSlug) => (
+                    <Link
+                      key={workSlug}
+                      href={`/work/${workSlug}/`}
+                      className="text-sm font-medium text-violet-500 hover:text-violet-600"
+                    >
+                      → {workSlug}
                     </Link>
                   ))}
                 </div>

@@ -8,14 +8,16 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   'nav.navigation': 'Navigation',
 
   // Home page
-  'home.title': 'React Playground',
+  'home.title': 'Playground',
   'home.description':
-    'Eine Sammlung von Apps, Spielen, Experimenten und Demos mit React. Entdecke verschiedene React-Patterns und Features.',
+    'Eine Sammlung von Apps, Spielen, Experimenten und Demos. Entdecke verschiedene Projekte, Patterns und Features.',
   'home.apps': 'Apps',
 
   // App list
   'filter.all': 'Alle',
   'filter.games': 'Spiele',
+  'filter.tools': 'Tools',
+  'filter.web': 'Web',
   'filter.misc': 'Sonstiges',
   'card.readMore': 'Weiterlesen',
 
@@ -27,7 +29,7 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   // Journal
   'journal.title': 'Journal',
   'journal.description':
-    'Dokumentation meiner Lernreise mit React. Notizen zu Patterns, Bugs und Entdeckungen.',
+    'Dokumentation meiner Lernreise. Notizen zu Patterns, Bugs und Entdeckungen.',
 
   // Footer
   'footer.builtWith': 'Gebaut mit Next.js & React.',
@@ -45,6 +47,12 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   'app.memory-game.title': 'Memory-Spiel',
   'app.memory-game.description':
     'Ein Karten-Memory-Spiel mit Umdreh-Animationen. Finde alle 6 passenden Paare in so wenigen Z\u00FCgen wie m\u00F6glich.',
+  'app.calisthenics-progression.title': 'Calisthenics Progression',
+  'app.calisthenics-progression.description':
+    'Eine Flask-Webanwendung zur Verfolgung von Calisthenics-Workouts und \u00DCbungsprogressionen.',
+  'app.digital-handshake.title': 'Digital Handshake',
+  'app.digital-handshake.description':
+    'Eine pers\u00F6nliche Portfolio-Website, erstellt mit Next.js, React, TypeScript und Tailwind CSS \u2014 statisch exportiert und mit MDX-Inhalten.',
 
   // Journal detail titles & descriptions
   'journal.hydration-fix.title': 'Hydration-Mismatch im Memory-Spiel beheben',

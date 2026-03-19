@@ -8,6 +8,7 @@ interface JournalEntry {
   category: string
   tags?: string[]
   relatedApps?: string[]
+  relatedWork?: string[]
 }
 
 export interface JournalEntryWithSlug extends JournalEntry {
@@ -47,6 +48,11 @@ export async function getAllJournalEntries() {
 export async function getJournalEntriesForApp(appSlug: string) {
   let entries = await getAllJournalEntries()
   return entries.filter((e) => e.relatedApps?.includes(appSlug))
+}
+
+export async function getJournalEntriesForWork(workSlug: string) {
+  let entries = await getAllJournalEntries()
+  return entries.filter((e) => e.relatedWork?.includes(workSlug))
 }
 
 export async function getJournalCategories() {
