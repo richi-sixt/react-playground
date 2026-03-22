@@ -53,6 +53,9 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   'app.digital-handshake.title': 'Digital Handshake',
   'app.digital-handshake.description':
     'Eine pers\u00F6nliche Portfolio-Website, erstellt mit Next.js, React, TypeScript und Tailwind CSS \u2014 statisch exportiert und mit MDX-Inhalten.',
+  'app.playground.title': 'Playground',
+  'app.playground.description':
+    'Eine React-Plattform zum Lernen, Dokumentieren und praktischen Erkunden von React-Features, Patterns und Konzepten.',
 
   // Journal detail titles & descriptions
   'journal.hydration-fix.title': 'Hydration-Mismatch im Memory-Spiel beheben',
