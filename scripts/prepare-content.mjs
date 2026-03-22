@@ -3,29 +3,21 @@
 /**
  * prepare-content.mjs
  *
- * Copies journal entries into src/app/journal/ before build/dev.
+ * Copies journal entries from journal/ into src/app/journal/ before build/dev.
  *
- * Sources (both are merged):
- *   1. journal-examples/ → example entries (tracked in git)
- *   2. journal/          → real entries (gitignored)
- *
- * In git, only journal-examples/ is tracked. During build, both
- * sources are combined so all entries appear on the site.
+ * The journal/ directory is the single source of truth.
+ * Use journal-examples/ as a reference to create your own entries.
  *
  * Usage:
- *   node scripts/prepare-content.mjs             # merge both sources
- *   node scripts/prepare-content.mjs --examples  # only use examples
+ *   node scripts/prepare-content.mjs
  */
 
 import { existsSync, cpSync, rmSync, readdirSync, statSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
 const ROOT = resolve(import.meta.dirname, '..')
-const EXAMPLES_DIR = join(ROOT, 'journal-examples')
 const JOURNAL_DIR = join(ROOT, 'journal')
 const TARGET_DIR = join(ROOT, 'src', 'app', 'journal')
-
-const forceExamples = process.argv.includes('--examples')
 
 /**
  * Remove all content subdirectories from src/app/journal/
@@ -44,19 +36,18 @@ function cleanTarget() {
 }
 
 /**
- * Copy entry subdirectories from a source directory into src/app/journal/
+ * Copy entry subdirectories from journal/ into src/app/journal/
  */
-function copyEntries(sourceDir, label) {
-  if (!existsSync(sourceDir)) {
-    console.log(`  ⚠ ${label} not found, skipping`)
+function copyEntries() {
+  if (!existsSync(JOURNAL_DIR)) {
     return 0
   }
 
-  const entries = readdirSync(sourceDir)
+  const entries = readdirSync(JOURNAL_DIR)
   let count = 0
 
   for (const entry of entries) {
-    const sourcePath = join(sourceDir, entry)
+    const sourcePath = join(JOURNAL_DIR, entry)
     if (!statSync(sourcePath).isDirectory()) continue
 
     const targetPath = join(TARGET_DIR, entry)
@@ -69,26 +60,17 @@ function copyEntries(sourceDir, label) {
 
 // --- Main ---
 
-console.log('📄 Preparing journal content...\n')
+console.log('📄 Preparing journal content from journal/...\n')
+
+if (!existsSync(JOURNAL_DIR)) {
+  console.log('⚠  journal/ directory not found.')
+  console.log('   Copy entries from journal-examples/ to journal/ to get started.\n')
+  process.exit(0)
+}
 
 cleanTarget()
 
-let totalCopied = 0
+const count = copyEntries()
+console.log(`   → ${count} entries copied`)
 
-// Always copy examples first
-console.log('🔄 journal-examples/')
-const exampleCount = copyEntries(EXAMPLES_DIR, 'journal-examples/')
-console.log(`   → ${exampleCount} entries copied`)
-totalCopied += exampleCount
-
-// Then overlay real entries (unless --examples flag)
-if (!forceExamples) {
-  console.log('🔄 journal/')
-  const realCount = copyEntries(JOURNAL_DIR, 'journal/')
-  console.log(`   → ${realCount} entries copied`)
-  totalCopied += realCount
-} else {
-  console.log('⏭ Skipping journal/ (--examples flag)')
-}
-
-console.log(`\n✅ Done! ${totalCopied} journal entries prepared.\n`)
+console.log(`\n✅ Done! ${count} journal entries prepared.\n`)
