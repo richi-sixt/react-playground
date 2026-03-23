@@ -9,7 +9,7 @@ export const metadata = {
   description: app.description,
 }
 
-export default async function CalisthenicsProgressionPage() {
+export default async function PlaygroundPage() {
   return (
     <AppDetailLayout app={app}>
       <MdxContent />

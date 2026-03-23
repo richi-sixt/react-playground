@@ -67,6 +67,9 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   'journal.private-submodules.title': 'Privater Inhalt mit Git Submodules',
   'journal.private-submodules.description':
     'Wie man ein öffentliches Repository beibehält und gleichzeitig private Inhalte wie Tagebucheinträge oder Portfolio-Daten mit Git-Submodulen verwaltet.',
+  'journal.playground-doc.title': 'Dokumentation der Playground-App',
+  'journal.playground-doc.description':
+    'Eine anf\u00E4ngerfreundliche Schritt-für-Schritt-Anleitung zum gesamten Playground-Projekt',
 
   
   // Tic Tac Toe (solo)
