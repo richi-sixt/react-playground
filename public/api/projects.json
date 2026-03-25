@@ -18,7 +18,7 @@
   {
     "slug": "memory-game",
     "title": "Memory Game",
-    "description": "A card-matching memory game with flip animations. Find all 6 matching pairs in as few moves as possible.",
+    "description": "A card-matching memory game with flip animations. Find all matching pairs in as few moves as possible.",
     "tech": [
       "React",
       "TypeScript",

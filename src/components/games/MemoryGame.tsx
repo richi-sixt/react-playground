@@ -4,28 +4,35 @@
 import { useState, useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { useTranslation } from '@/i18n'
+import { MemoryCardFace } from './MemoryCardFace'
+import { MemorySettings } from './MemorySettings'
+import {
+  DEFAULT_GRID_SIZE,
+  DEFAULT_THEME,
+  getGridSizeById,
+  getThemeById,
+  getItemsForGrid,
+  getCardSizeClasses,
+  getEmojiSizeClasses,
+  type GridSize,
+  type Theme,
+  type CardContentType,
+} from '@/lib/memory-config'
 
 interface Card {
   id: number
-  imageId: number
-  imageSrc: string
+  itemId: string
+  type: CardContentType
+  content: string
   isFlipped: boolean
   isMatched: boolean
 }
 
-const CARD_IMAGES = [
-  '/images/memory-game/star.svg',
-  '/images/memory-game/heart.svg',
-  '/images/memory-game/diamond.svg',
-  '/images/memory-game/circle.svg',
-  '/images/memory-game/triangle.svg',
-  '/images/memory-game/hexagon.svg',
-]
-
-function createDeck(): Card[] {
-  return CARD_IMAGES.flatMap((src, imageId) => [
-    { id: imageId * 2, imageId, imageSrc: src, isFlipped: false, isMatched: false },
-    { id: imageId * 2 + 1, imageId, imageSrc: src, isFlipped: false, isMatched: false },
+function createDeck(theme: Theme, gridSize: GridSize): Card[] {
+  const items = getItemsForGrid(theme, gridSize.pairs)
+  return items.flatMap((item, idx) => [
+    { id: idx * 2, itemId: item.id, type: item.type, content: item.content, isFlipped: false, isMatched: false },
+    { id: idx * 2 + 1, itemId: item.id, type: item.type, content: item.content, isFlipped: false, isMatched: false },
   ])
 }
 
@@ -40,6 +47,8 @@ function shuffleDeck(cards: Card[]): Card[] {
 
 export function MemoryGame() {
   let { t } = useTranslation()
+  const [gridSize, setGridSize] = useState<GridSize>(DEFAULT_GRID_SIZE)
+  const [theme, setTheme] = useState<Theme>(DEFAULT_THEME)
   // Start with empty deck to avoid hydration mismatch — shuffled deck
   // is only created client-side in useEffect.
   const [cards, setCards] = useState<Card[]>([])
@@ -49,15 +58,20 @@ export function MemoryGame() {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const matchedPairs = cards.filter((c) => c.isMatched).length / 2
-  const isGameWon = matchedPairs === CARD_IMAGES.length
-  const totalCards = CARD_IMAGES.length * 2
+  const isGameWon = cards.length > 0 && matchedPairs === gridSize.pairs
+  const totalCards = gridSize.rows * gridSize.cols
+  const cardSizeClasses = getCardSizeClasses(gridSize)
+  const emojiSizeClasses = getEmojiSizeClasses(gridSize)
 
   useEffect(() => {
-    setCards(shuffleDeck(createDeck()))
+    setCards(shuffleDeck(createDeck(theme, gridSize)))
+    setSelectedCards([])
+    setMoves(0)
+    setIsChecking(false)
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
     }
-  }, [])
+  }, [gridSize, theme])
 
   function handleCardClick(index: number) {
     if (isChecking) return
@@ -76,7 +90,7 @@ export function MemoryGame() {
       setMoves((m) => m + 1)
       const [first, second] = newSelected
 
-      if (newCards[first].imageId === newCards[second].imageId) {
+      if (newCards[first].itemId === newCards[second].itemId) {
         setCards(
           newCards.map((card, i) =>
             i === first || i === second ? { ...card, isMatched: true } : card,
@@ -102,7 +116,7 @@ export function MemoryGame() {
 
   function handleNewGame() {
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    setCards(shuffleDeck(createDeck()))
+    setCards(shuffleDeck(createDeck(theme, gridSize)))
     setSelectedCards([])
     setMoves(0)
     setIsChecking(false)
@@ -110,12 +124,19 @@ export function MemoryGame() {
 
   return (
     <div className="flex flex-col items-center">
+      <MemorySettings
+        gridSizeId={gridSize.id}
+        themeId={theme.id}
+        onGridSizeChange={(id) => setGridSize(getGridSizeById(id))}
+        onThemeChange={(id) => setTheme(getThemeById(id))}
+      />
+
       <div className="mb-6 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
         <div className="text-lg font-medium text-zinc-800 dark:text-zinc-200">
           {t('memory.moves', { count: moves })}
         </div>
         <div className="text-lg font-medium text-zinc-800 dark:text-zinc-200">
-          {t('memory.pairs', { matched: matchedPairs, total: CARD_IMAGES.length })}
+          {t('memory.pairs', { matched: matchedPairs, total: gridSize.pairs })}
         </div>
         <button
           onClick={handleNewGame}
@@ -137,7 +158,7 @@ export function MemoryGame() {
             Array.from({ length: totalCards }, (_, i) => (
               <div
                 key={i}
-                className="h-24 w-20 sm:h-32 sm:w-28"
+                className={cardSizeClasses}
               >
                 <div className="relative h-full w-full">
                   <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-violet-500 text-3xl font-bold text-white dark:bg-violet-600">
@@ -150,7 +171,7 @@ export function MemoryGame() {
               <div
                 key={card.id}
                 onClick={() => handleCardClick(index)}
-                className="h-24 w-20 cursor-pointer [perspective:1000px] sm:h-32 sm:w-28"
+                className={clsx(cardSizeClasses, 'cursor-pointer [perspective:1000px]')}
               >
                 <div
                   className={clsx(
@@ -173,22 +194,12 @@ export function MemoryGame() {
                     ?
                   </div>
                   {/* Front face — visible when card is flipped */}
-                  <div
-                    className={clsx(
-                      'absolute inset-0 flex items-center justify-center rounded-xl',
-                      'border border-zinc-200 bg-white p-3 [backface-visibility:hidden] [transform:rotateY(180deg)]',
-                      'dark:border-zinc-700 dark:bg-zinc-800',
-                      card.isMatched &&
-                        'ring-2 ring-green-400 dark:ring-green-500',
-                    )}
-                  >
-                    <img
-                      src={card.imageSrc}
-                      alt="card"
-                      className="h-full w-full object-contain"
-                      draggable={false}
-                    />
-                  </div>
+                  <MemoryCardFace
+                    type={card.type}
+                    content={card.content}
+                    isMatched={card.isMatched}
+                    emojiSizeClasses={emojiSizeClasses}
+                  />
                 </div>
               </div>
             ))}

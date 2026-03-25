@@ -70,6 +70,9 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   'journal.playground-doc.title': 'Dokumentation der Playground-App',
   'journal.playground-doc.description':
     'Eine anf\u00E4ngerfreundliche Schritt-für-Schritt-Anleitung zum gesamten Playground-Projekt',
+  'journal.memory-features.title': 'Memory-Spiel: Spielfeldgrösse & Thema-Auswahl',
+  'journal.memory-features.description':
+    'Wie die konfigurierbaren Spielfeldgrössen und Karten-Themen zum Memory-Spiel hinzugefügt wurden, mit Anleitung zur Erweiterung.',
 
   
   // Tic Tac Toe (solo)
@@ -86,12 +89,24 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   // Memory Game (solo)
   'memory.title': 'Memory',
   'memory.description':
-    'Decke Karten auf und finde passende Paare. Finde alle 6 Paare in so wenigen Z\u00FCgen wie m\u00F6glich.',
+    'Decke Karten auf und finde passende Paare. Finde alle Paare in so wenigen Z\u00FCgen wie m\u00F6glich.',
   'memory.playMultiplayer': 'Multiplayer spielen',
   'memory.moves': 'Z\u00FCge: {{count}}',
   'memory.pairs': 'Paare: {{matched}} / {{total}}',
   'memory.newGame': 'Neues Spiel',
   'memory.youWon': 'Gewonnen in {{moves}} Z\u00FCgen!',
+
+  // Memory Game settings
+  'memory.gridSize': 'Spielfeld',
+  'memory.theme': 'Thema',
+  'memory.grid.4x3': '4 \u00D7 3 (6 Paare)',
+  'memory.grid.4x4': '4 \u00D7 4 (8 Paare)',
+  'memory.grid.4x5': '4 \u00D7 5 (10 Paare)',
+  'memory.grid.4x6': '4 \u00D7 6 (12 Paare)',
+  'memory.theme.shapes': 'Formen',
+  'memory.theme.animals': 'Tiere',
+  'memory.theme.emoji': 'Emoji',
+  'memory.theme.vehicles': 'Fahrzeuge',
 
   // Multiplayer shared
   'mp.multiplayer': 'Multiplayer',
