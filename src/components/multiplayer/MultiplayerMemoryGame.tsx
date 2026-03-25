@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import clsx from 'clsx'
 import { useTranslation } from '@/i18n'
 import { GameLobby } from './GameLobby'
+import { MemoryCardFace } from '../games/MemoryCardFace'
+import { MemorySettings } from '../games/MemorySettings'
 import {
   subscribeToRoom,
   unsubscribeFromRoom,
@@ -11,23 +13,29 @@ import {
   type Room,
   type MemoryGameState,
 } from '@/lib/multiplayer'
+import {
+  DEFAULT_GRID_SIZE,
+  DEFAULT_THEME,
+  getGridSizeById,
+  getThemeById,
+  getItemsForGrid,
+  getCardSizeClasses,
+  getEmojiSizeClasses,
+} from '@/lib/memory-config'
 import type { RealtimeChannel } from '@supabase/supabase-js'
 
-// ---- Card images (same as solo game) ----
+// ---- Deck creation ----
 
-const CARD_IMAGES = [
-  '/images/memory-game/star.svg',
-  '/images/memory-game/heart.svg',
-  '/images/memory-game/diamond.svg',
-  '/images/memory-game/circle.svg',
-  '/images/memory-game/triangle.svg',
-  '/images/memory-game/hexagon.svg',
-]
-
-function createShuffledDeck(): MemoryGameState['cards'] {
-  const cards = CARD_IMAGES.flatMap((src, imageId) => [
-    { id: imageId * 2, imageId, imageSrc: src },
-    { id: imageId * 2 + 1, imageId, imageSrc: src },
+function createShuffledDeck(
+  themeId: string,
+  gridSizeId: string,
+): MemoryGameState['cards'] {
+  const theme = getThemeById(themeId)
+  const gridSize = getGridSizeById(gridSizeId)
+  const items = getItemsForGrid(theme, gridSize.pairs)
+  const cards = items.flatMap((item, idx) => [
+    { id: idx * 2, itemId: item.id, type: item.type, content: item.content },
+    { id: idx * 2 + 1, itemId: item.id, type: item.type, content: item.content },
   ])
   // Fisher-Yates shuffle
   for (let i = cards.length - 1; i > 0; i--) {
@@ -37,9 +45,14 @@ function createShuffledDeck(): MemoryGameState['cards'] {
   return cards
 }
 
-function createInitialMemoryState(): MemoryGameState {
+function createInitialMemoryState(
+  themeId: string,
+  gridSizeId: string,
+): MemoryGameState {
   return {
-    cards: createShuffledDeck(),
+    gridSizeId,
+    themeId,
+    cards: createShuffledDeck(themeId, gridSizeId),
     flippedIndices: [],
     matchedIndices: [],
     scoreA: 0,
@@ -54,6 +67,8 @@ export function MultiplayerMemoryGame() {
   const { t } = useTranslation()
   const [room, setRoom] = useState<Room | null>(null)
   const [playerId, setPlayerId] = useState<string>('')
+  const [gridSizeId, setGridSizeId] = useState(DEFAULT_GRID_SIZE.id)
+  const [themeId, setThemeId] = useState(DEFAULT_THEME.id)
   const channelRef = useRef<RealtimeChannel | null>(null)
   const mismatchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -95,17 +110,33 @@ export function MultiplayerMemoryGame() {
   // ---- Lobby phase ----
   if (!room || room.status === 'waiting') {
     return (
-      <GameLobby
-        gameType="memory-game"
-        initialGameState={createInitialMemoryState}
-        onRoomReady={handleRoomReady}
-      />
+      <>
+        <MemorySettings
+          gridSizeId={gridSizeId}
+          themeId={themeId}
+          onGridSizeChange={setGridSizeId}
+          onThemeChange={setThemeId}
+        />
+        <GameLobby
+          gameType="memory-game"
+          initialGameState={() => createInitialMemoryState(themeId, gridSizeId)}
+          onRoomReady={handleRoomReady}
+        />
+      </>
     )
   }
 
   // ---- Game phase ----
   const state = room.game_state as MemoryGameState
   const { cards, flippedIndices, matchedIndices, scoreA, scoreB, moves } = state
+
+  // Read grid/theme from game state (synced between players), with backward compat
+  const gameGridSizeId = state.gridSizeId ?? '4x3'
+  const gameThemeId = state.themeId ?? 'shapes'
+  const gameGridSize = getGridSizeById(gameGridSizeId)
+  const cardSizeClasses = getCardSizeClasses(gameGridSize)
+  const emojiSizeClasses = getEmojiSizeClasses(gameGridSize)
+
   const isPlayerA = room.player_a === playerId
   const isMyTurn = room.current_turn === playerId
   const totalPairs = cards.length / 2
@@ -158,7 +189,7 @@ export function MultiplayerMemoryGame() {
     } else if (newFlipped.length === 2) {
       // Second card flipped — check for match
       const [first, second] = newFlipped
-      const isMatch = cards[first].imageId === cards[second].imageId
+      const isMatch = cards[first].itemId === cards[second].itemId
 
       if (isMatch) {
         // Match! Player stays on turn, score increases
@@ -268,7 +299,8 @@ export function MultiplayerMemoryGame() {
               key={card.id}
               onClick={() => handleCardClick(index)}
               className={clsx(
-                'h-24 w-20 sm:h-32 sm:w-28 [perspective:1000px]',
+                cardSizeClasses,
+                '[perspective:1000px]',
                 isMyTurn && !isFlipped && !isMatched && !isGameOver
                   ? 'cursor-pointer'
                   : 'cursor-default',
@@ -295,21 +327,12 @@ export function MultiplayerMemoryGame() {
                   ?
                 </div>
                 {/* Front face — visible when card is flipped */}
-                <div
-                  className={clsx(
-                    'absolute inset-0 flex items-center justify-center rounded-xl',
-                    'border border-zinc-200 bg-white p-3 [backface-visibility:hidden] [transform:rotateY(180deg)]',
-                    'dark:border-zinc-700 dark:bg-zinc-800',
-                    isMatched && 'ring-2 ring-green-400 dark:ring-green-500',
-                  )}
-                >
-                  <img
-                    src={card.imageSrc}
-                    alt="card"
-                    className="h-full w-full object-contain"
-                    draggable={false}
-                  />
-                </div>
+                <MemoryCardFace
+                  type={card.type}
+                  content={card.content}
+                  isMatched={isMatched}
+                  emojiSizeClasses={emojiSizeClasses}
+                />
               </div>
             </div>
           )

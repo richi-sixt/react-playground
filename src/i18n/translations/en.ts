@@ -52,12 +52,24 @@ const en = {
   // Memory Game (solo)
   'memory.title': 'Memory Game',
   'memory.description':
-    'Flip cards to find matching pairs. Match all 6 pairs in as few moves as possible.',
+    'Flip cards to find matching pairs. Match all pairs in as few moves as possible.',
   'memory.playMultiplayer': 'Play Multiplayer',
   'memory.moves': 'Moves: {{count}}',
   'memory.pairs': 'Pairs: {{matched}} / {{total}}',
   'memory.newGame': 'New Game',
   'memory.youWon': 'You won in {{moves}} moves!',
+
+  // Memory Game settings
+  'memory.gridSize': 'Grid',
+  'memory.theme': 'Theme',
+  'memory.grid.4x3': '4 \u00D7 3 (6 pairs)',
+  'memory.grid.4x4': '4 \u00D7 4 (8 pairs)',
+  'memory.grid.4x5': '4 \u00D7 5 (10 pairs)',
+  'memory.grid.4x6': '4 \u00D7 6 (12 pairs)',
+  'memory.theme.shapes': 'Shapes',
+  'memory.theme.animals': 'Animals',
+  'memory.theme.emoji': 'Emoji',
+  'memory.theme.vehicles': 'Vehicles',
 
   // Multiplayer shared
   'mp.multiplayer': 'Multiplayer',
