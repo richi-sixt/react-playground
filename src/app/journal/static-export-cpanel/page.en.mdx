@@ -8,14 +8,20 @@ export const entry = {
   relatedApps: ['memory-game', 'tic-tac-toe'],
 }
 
-After adding the journal feature to this playground, the entire site went down on my shared hosting. 
-What followed was a debugging journey that ended with a much simpler and more reliable deployment -> Back to the roots.
+After adding the journal feature to this playground, the entire site went down
+on my shared hosting.
+What followed was a debugging journey that ended with a much simpler and more
+reliable deployment -> Back to the roots.
 
 ## The Problem
 
-The app runs on Novatrend shared hosting with cPanel, which uses CloudLinux to enforce resource limits. After uploading the journal feature, the Node.js app started hitting **NprocF** (Number of Processes Faults) — meaning it exceeded the 100-process limit allowed on shared hosting.
+The app runs on Novatrend shared hosting with cPanel, which uses CloudLinux to
+enforce resource limits. After uploading the journal feature, the Node.js app
+started hitting **NprocF** (Number of Processes Faults) — meaning it exceeded
+the 100-process limit allowed on shared hosting.
 
-The cPanel error was clear: *"Unable to fork — User has reached resource limits"*. The Next.js standalone server couldn't even start anymore.
+The cPanel error was clear: *"Unable to fork — User has reached resource
+limits"*. The Next.js standalone server couldn't even start anymore.
 
 ## Debugging Journey
 
@@ -24,24 +30,35 @@ The cPanel error was clear: *"Unable to fork — User has reached resource limit
 First suspicion: <a href="https://www.npmjs.com/package/fast-glob" target="_blank" rel="noopener noreferrer">`fast-glob`</a>, used to discover app and journal MDX files at build time, might be spawning child processes at runtime.
 I replaced it with Node's built-in <a href="https://www.geeksforgeeks.org/node-js/node-js-fs-readdirsync-method/" target="_blank" rel="noopener noreferrer">`fs.readdirSync`</a> — fewer dependencies, no child processes.
 
-But looking at the build output revealed that all pages were already marked `○` (Static). 
-The glob replacement was a good cleanup, but it wasn't the cause — these functions only ran at build time, not on the server.
+But looking at the build output revealed that all pages were already marked `○`
+(Static).
+The glob replacement was a good cleanup, but it wasn't the cause — these
+functions only ran at build time, not on the server.
 
 ### Attempt 2: Slim Down the Standalone Bundle
 
-Next, I noticed that `typescript` (20MB) and other build-only packages were in `dependencies` instead of `devDependencies`. After moving them and adding `outputFileTracingExcludes`, the standalone output dropped from **59MB to 23MB** — a 61% reduction.
+Next, I noticed that `typescript` (20MB) and other build-only packages were in
+`dependencies` instead of `devDependencies`. After moving them and adding
+`outputFileTracingExcludes`, the standalone output dropped from **59MB to 23MB**
+— a 61% reduction.
 
-Still got the same error. The Node.js process couldn't even start within the process limit.
+Still got the same error. The Node.js process couldn't even start within the
+process limit.
 
 ### The Realization
 
-The problem wasn't a specific dependency or a heavy page — it was the **Next.js standalone server itself**. Even a minimal Node.js + Next.js server needs multiple processes to boot (V8, garbage collector, worker threads). On a shared host with a 100-process limit shared across *all* your sites, that's simply too much.
+The problem wasn't a specific dependency or a heavy page — it was the **Next.js
+standalone server itself**. Even a minimal Node.js + Next.js server needs
+multiple processes to boot (V8, garbage collector, worker threads). On a shared
+host with a 100-process limit shared across *all* your sites, that's simply too
+much.
 
 ## The Solution
 
 The key insight: every single page in this app is static. There are no API routes, no middleware, no server-side rendering, and <a href="https://www.supabase.com" target="_blank" rel="noopener noreferrer">`Supabase`</a> runs entirely in the browser. **We don't need a server at all.**
 
-Switching to `output: 'export'` in Next.js config generates pure HTML, CSS, and JavaScript files — served directly by Apache with zero Node.js involvement.
+Switching to `output: 'export'` in Next.js config generates pure HTML, CSS, and
+JavaScript files — served directly by Apache with zero Node.js involvement.
 
 ```javascript
 // next.config.mjs — the one-line fix
@@ -60,8 +77,14 @@ Die Ergebnisse waren deutlich:
 | NprocF risk | High | Zero |
 | Server | Passenger + Node.js | Apache (default) |
 
-A simple `deploy.sh` now just copies the `out/` folder and an `.htaccess` file (for gzip compression and browser caching) into a zip. Upload to cPanel, done — no app restart, no Passenger, no Node.js.
+A simple `deploy.sh` now just copies the `out/` folder and an `.htaccess` file
+(for gzip compression and browser caching) into a zip. Upload to cPanel, done —
+no app restart, no Passenger, no Node.js.
 
 ## Key Takeaway
 
-If all your pages are static, you don't need a server. Before reaching for `output: 'standalone'`, check whether `output: 'export'` covers your use case. For a site with no API routes, no SSR, and only client-side data fetching, static export is simpler, faster, and far more compatible with shared hosting environments.
+If all your pages are static, you don't need a server. Before reaching for
+`output: 'standalone'`, check whether `output: 'export'` covers your use case.
+For a site with no API routes, no SSR, and only client-side data fetching,
+static export is simpler, faster, and far more compatible with shared hosting
+environments.

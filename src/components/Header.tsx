@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import {
@@ -14,7 +13,6 @@ import clsx from 'clsx'
 
 import { Container } from '@/components/Container'
 import { useTranslation } from '@/i18n'
-import avatarImage from '@/images/react.svg'
 
 function CloseIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -253,13 +251,17 @@ function Avatar({
       className={clsx(className, 'pointer-events-auto')}
       {...props}
     >
-      <Image
-        src={avatarImage}
-        alt=""
-        sizes="2.25rem"
-        className="h-9 w-9 rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
-        priority
-      />
+      <svg
+        viewBox="0 0 36 36"
+        aria-hidden="true"
+        className="h-9 w-9 text-violet-500 dark:text-violet-400"
+      >
+        <circle cx="18" cy="18" r="18" fill="currentColor" opacity="0.15" />
+        <polygon
+          points="14,11 28,18 14,25"
+          fill="currentColor"
+        />
+      </svg>
     </Link>
   )
 }
