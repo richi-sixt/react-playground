@@ -21,7 +21,9 @@ export interface TicTacToeState {
 }
 
 export interface MemoryGameState {
-  cards: { id: number; imageId: number; imageSrc: string }[]
+  gridSizeId: string
+  themeId: string
+  cards: { id: number; itemId: string; type: 'image' | 'emoji'; content: string }[]
   flippedIndices: number[]
   matchedIndices: number[]
   scoreA: number
