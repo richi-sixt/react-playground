@@ -8,6 +8,7 @@ A personal playground for learning and exploring React features, patterns, and c
 | --------------- | -------------------------------------------------------------------------------------------------------- | ------------------- |
 | **Tic Tac Toe** | `useState`, immutable state, component composition, lifting state up, multiplayer (Supabase Realtime)    | `/apps/tic-tac-toe` |
 | **Memory Game** | `useState`, `useEffect`, timers, conditional rendering, flip animations, multiplayer (Supabase Realtime) | `/apps/memory-game` |
+| **15 Puzzle** | `setInterval`, `useEffect`, `useRef` leak-free timer, sovalbility check, inversion counting, blank-row parity | `/apps/puzzle-slider` |
 
 ## Learning Goals
 

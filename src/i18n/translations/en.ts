@@ -48,6 +48,15 @@ const en = {
   'ttt.goToMove': 'Go to move #{{move}}',
   'ttt.restart': 'Restart game',
   'ttt.moveHistory': 'Move History',
+  'ttt.mode': 'Mode',
+  'ttt.vsPlayer': 'vs Player',
+  'ttt.vsComputer': 'vs Computer',
+  'ttt.difficulty': 'Difficulty',
+  'ttt.difficulty.easy': 'Easy',
+  'ttt.difficulty.medium': 'Medium',
+  'ttt.difficulty.hard': 'Hard',
+  'ttt.computerThinking': 'Computer is thinking…',
+  'ttt.draw': "It's a draw!",
 
   // Memory Game (solo)
   'memory.title': 'Memory Game',
