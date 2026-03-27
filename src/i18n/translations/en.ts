@@ -107,6 +107,15 @@ const en = {
     'Play Tic Tac Toe against a friend in real time. Create a room and share the code \u2014 or join an existing room.',
   'mp.ttt.yourTurnMark': 'Your turn ({{mark}})',
 
+  // Puzzle Slider
+  'puzzle.title': '15 Puzzle',
+  'puzzle.description':
+    'Slide tiles into order. Arrange numbers 1\u201315 in as few moves and as little time as possible.',
+  'puzzle.moves': 'Moves: {{count}}',
+  'puzzle.time': 'Time: {{time}}',
+  'puzzle.newGame': 'New Game',
+  'puzzle.youWon': 'Solved in {{moves}} moves \u2014 {{time}}! \uD83C\uDF89',
+
   // Multiplayer Memory
   'mp.memory.title': 'Memory Game',
   'mp.memory.description':

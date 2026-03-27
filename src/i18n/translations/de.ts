@@ -146,6 +146,15 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
     'Spiele Tic Tac Toe gegen einen Freund in Echtzeit. Erstelle einen Raum und teile den Code \u2014 oder tritt einem bestehenden Raum bei.',
   'mp.ttt.yourTurnMark': 'Dein Zug ({{mark}})',
 
+  // Puzzle Slider
+  'puzzle.title': '15-Puzzle',
+  'puzzle.description':
+    'Schiebe die Kacheln in die richtige Reihenfolge. Ordne die Zahlen 1\u201315 in so wenigen Z\u00FCgen und so kurzer Zeit wie m\u00F6glich.',
+  'puzzle.moves': 'Z\u00FCge: {{count}}',
+  'puzzle.time': 'Zeit: {{time}}',
+  'puzzle.newGame': 'Neues Spiel',
+  'puzzle.youWon': 'Gel\u00F6st in {{moves}} Z\u00FCgen \u2014 {{time}}! \uD83C\uDF89',
+
   // Multiplayer Memory
   'mp.memory.title': 'Memory',
   'mp.memory.description':
