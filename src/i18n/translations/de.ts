@@ -56,7 +56,7 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   'app.playground.title': 'Playground',
   'app.playground.description':
     'Eine React-Plattform zum Lernen, Dokumentieren und praktischen Erkunden von React-Features, Patterns und Konzepten.',
-  'app.puzzle-slider.title': '15 Puzzler',
+  'app.puzzle-slider.title': '15 Puzzle',
   'app.puzzle-slider.description':
     'Ein Schiebepuzzle, bei dem du 15 nummerierte Kacheln in die richtige Reihenfolge bringst, indem du benachbarte Kacheln in das leere Feld klickst.',
 
@@ -88,6 +88,15 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   'ttt.goToMove': 'Zu Zug #{{move}}',
   'ttt.restart': 'Neues Spiel',
   'ttt.moveHistory': 'Zughistorie',
+  'ttt.mode': 'Modus',
+  'ttt.vsPlayer': 'gegen Spieler',
+  'ttt.vsComputer': 'gegen Computer',
+  'ttt.difficulty': 'Schwierigkeit',
+  'ttt.difficulty.easy': 'Leicht',
+  'ttt.difficulty.medium': 'Mittel',
+  'ttt.difficulty.hard': 'Schwer',
+  'ttt.computerThinking': 'Computer denkt nach…',
+  'ttt.draw': 'Unentschieden!',
 
   // Memory Game (solo)
   'memory.title': 'Memory',

@@ -1,7 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from '@/i18n'
+import {
+  calculateWinner,
+  getComputerMove,
+  isBoardFull,
+  type Difficulty,
+  type GameMode,
+} from '@/lib/tic-tac-toe-ai'
 
 interface SquareProps {
   value: string | null
@@ -23,13 +30,14 @@ interface BoardProps {
   xIsNext: boolean
   squares: (string | null)[]
   onPlay: (squares: (string | null)[]) => void
+  isComputerTurn: boolean
 }
 
-function Board({ xIsNext, squares, onPlay }: BoardProps) {
+function Board({ xIsNext, squares, onPlay, isComputerTurn }: BoardProps) {
   let { t } = useTranslation()
 
   function handleClick(i: number): void {
-    if (squares[i] || calculateWinner(squares)) {
+    if (isComputerTurn || squares[i] || calculateWinner(squares)) {
       return
     }
     const nextSquares = squares.slice()
@@ -38,9 +46,16 @@ function Board({ xIsNext, squares, onPlay }: BoardProps) {
   }
 
   const winner = calculateWinner(squares)
-  const status = winner
-    ? t('ttt.winner', { mark: winner })
-    : t('ttt.nextPlayer', { mark: xIsNext ? 'X' : 'O' })
+  let status: string
+  if (winner) {
+    status = t('ttt.winner', { mark: winner })
+  } else if (isBoardFull(squares)) {
+    status = t('ttt.draw')
+  } else if (isComputerTurn) {
+    status = t('ttt.computerThinking')
+  } else {
+    status = t('ttt.nextPlayer', { mark: xIsNext ? 'X' : 'O' })
+  }
 
   return (
     <>
@@ -65,7 +80,15 @@ function Board({ xIsNext, squares, onPlay }: BoardProps) {
   )
 }
 
-export function TicTacToe() {
+interface TicTacToeProps {
+  mode?: GameMode
+  difficulty?: Difficulty
+}
+
+export function TicTacToe({
+  mode = 'local',
+  difficulty = 'medium',
+}: TicTacToeProps) {
   let { t } = useTranslation()
   const [history, setHistory] = useState<(string | null)[][]>([
     Array(9).fill(null),
@@ -73,6 +96,24 @@ export function TicTacToe() {
   const [currentMove, setCurrentMove] = useState(0)
   const xIsNext = currentMove % 2 === 0
   const currentSquares = history[currentMove]
+  const isComputerTurn =
+    mode === 'computer' &&
+    !xIsNext &&
+    !calculateWinner(currentSquares) &&
+    !isBoardFull(currentSquares)
+
+  useEffect(() => {
+    if (!isComputerTurn) return
+
+    const timeout = setTimeout(() => {
+      const moveIndex = getComputerMove(currentSquares, difficulty)
+      const nextSquares = currentSquares.slice()
+      nextSquares[moveIndex] = 'O'
+      handlePlay(nextSquares)
+    }, 400)
+
+    return () => clearTimeout(timeout)
+  }, [isComputerTurn, currentSquares, difficulty])
 
   function handlePlay(nextSquares: (string | null)[]): void {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares]
@@ -101,7 +142,12 @@ export function TicTacToe() {
 
   return (
     <div className="flex flex-col items-center">
-      <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      <Board
+        xIsNext={xIsNext}
+        squares={currentSquares}
+        onPlay={handlePlay}
+        isComputerTurn={isComputerTurn}
+      />
       <div className="mt-6">
         <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
           {t('ttt.moveHistory')}
@@ -110,23 +156,4 @@ export function TicTacToe() {
       </div>
     </div>
   )
-}
-
-function calculateWinner(squares: (string | null)[]): string | null {
-  const lines: number[][] = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ]
-  for (const [a, b, c] of lines) {
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a]
-    }
-  }
-  return null
 }

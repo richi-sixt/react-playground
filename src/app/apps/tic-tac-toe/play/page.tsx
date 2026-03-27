@@ -2,7 +2,7 @@ import { type Metadata } from 'next'
 
 import { Container } from '@/components/Container'
 import { GamePageHeader } from '@/components/GamePageHeader'
-import { TicTacToe } from '@/components/games/TicTacToe'
+import { TicTacToePlayClient } from './TicTacToePlayClient'
 
 export const metadata: Metadata = {
   title: 'Tic Tac Toe',
@@ -19,7 +19,7 @@ export default function TicTacToePage() {
         multiplayerLabelKey="ttt.playMultiplayer"
       />
       <div className="mt-16 sm:mt-20">
-        <TicTacToe />
+        <TicTacToePlayClient />
       </div>
     </Container>
   )
