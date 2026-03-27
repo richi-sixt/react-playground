@@ -56,6 +56,9 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   'app.playground.title': 'Playground',
   'app.playground.description':
     'Eine React-Plattform zum Lernen, Dokumentieren und praktischen Erkunden von React-Features, Patterns und Konzepten.',
+  'app.puzzle-slider.title': '15 Puzzler',
+  'app.puzzle-slider.description':
+    'Ein Schiebepuzzle, bei dem du 15 nummerierte Kacheln in die richtige Reihenfolge bringst, indem du benachbarte Kacheln in das leere Feld klickst.',
 
   // Journal detail titles & descriptions
   'journal.hydration-fix.title': 'Hydration-Mismatch im Memory-Spiel beheben',
