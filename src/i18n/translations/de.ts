@@ -59,6 +59,9 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   'app.puzzle-slider.title': '15 Puzzle',
   'app.puzzle-slider.description':
     'Ein Schiebepuzzle, bei dem du 15 nummerierte Kacheln in die richtige Reihenfolge bringst, indem du benachbarte Kacheln in das leere Feld klickst.',
+  'app.lazy-inviter.title': 'Lazy Inviter',
+  'app.lazy-inviter.description':
+    'Eine React-Web-App zum Erstellen von thematischen Geburtstagseinladungen für Kinder.',
 
   // Journal detail titles & descriptions
   'journal.hydration-fix.title': 'Hydration-Mismatch im Memory-Spiel beheben',

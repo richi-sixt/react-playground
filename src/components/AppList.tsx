@@ -9,14 +9,14 @@ import { useTranslation } from '@/i18n'
 import { type AppWithSlug } from '@/lib/apps'
 import { te } from '@/lib/translatedEntry'
 
-type CategoryFilter = 'all' | 'games' | 'tools' | 'web' | 'misc'
+type CategoryFilter = 'all' | 'games' | 'tools' | 'web'
 
 const categoryKeys = {
   all: 'filter.all',
   games: 'filter.games',
   tools: 'filter.tools',
   web: 'filter.web',
-  misc: 'filter.misc',
+//  misc: 'filter.misc',
 } as const
 
 export function AppList({ apps }: { apps: AppWithSlug[] }) {
@@ -31,7 +31,7 @@ export function AppList({ apps }: { apps: AppWithSlug[] }) {
   return (
     <>
       <div className="mb-8 flex gap-2">
-        {(['all', 'games', 'tools', 'web', 'misc'] as const).map((cat) => (
+        {(['all', 'games', 'tools', 'web'] as const).map((cat) => (
           <button
             key={cat}
             onClick={() => setCategory(cat)}
