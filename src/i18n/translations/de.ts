@@ -62,7 +62,9 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   'app.lazy-inviter.title': 'Lazy Inviter',
   'app.lazy-inviter.description':
     'Eine React-Web-App zum Erstellen von thematischen Geburtstagseinladungen für Kinder.',
-
+  'app.cream.title': 'C.R.E.A.M. - eine persöliche Finanz-App',
+  'app.cream.description':
+    ' C.R.E.A.M. — eine persöliche Finanzverwaltungs-App für Schweizer Bankkonten und Rechnungen.',
   // Journal detail titles & descriptions
   'journal.hydration-fix.title': 'Hydration-Mismatch im Memory-Spiel beheben',
   'journal.hydration-fix.description':
