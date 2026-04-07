@@ -63,12 +63,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Ideas and to-dos
-
-- [x] ~~**Memory Game**~~ ✓
-- [x] ~~**Tic-Tac-Toe** multiplayer~~ ✓
-- [ ] How testing works with React/JS
-- [ ] **Todo App** — `useReducer`, `useContext`, CRUD patterns, auth, database
+---
 
 ## Resources
 
