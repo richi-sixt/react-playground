@@ -1,16 +1,19 @@
 import { supabase } from './supabase'
 import { type RealtimeChannel } from '@supabase/supabase-js'
+import type { UNOGameState } from './uno-engine/types'
 
 // ---- Types ----
 
 export interface Room {
   id: string
   code: string
-  game_type: 'tic-tac-toe' | 'memory-game'
+  game_type: 'tic-tac-toe' | 'memory-game' | 'uno'
   status: 'waiting' | 'playing' | 'finished'
-  player_a: string
-  player_b: string | null
-  game_state: TicTacToeState | MemoryGameState
+  players: string[]
+  player_names: Record<string, string>
+  host_player: string
+  max_players: number
+  game_state: TicTacToeState | MemoryGameState | UNOGameState
   current_turn: string | null
   winner: string | null
   created_at: string
@@ -31,6 +34,16 @@ export interface MemoryGameState {
   moves: number
 }
 
+// ---- Player helpers (backward-compatible) ----
+
+export function getPlayerA(room: Room): string {
+  return room.players[0]
+}
+
+export function getPlayerB(room: Room): string | null {
+  return room.players[1] ?? null
+}
+
 // ---- Room code generation ----
 
 function generateRoomCode(): string {
@@ -47,7 +60,9 @@ function generateRoomCode(): string {
 export async function createRoom(
   gameType: Room['game_type'],
   playerId: string,
-  initialState: TicTacToeState | MemoryGameState,
+  initialState: TicTacToeState | MemoryGameState | UNOGameState,
+  maxPlayers: number = 2,
+  playerName: string = '',
 ): Promise<Room> {
   for (let attempt = 0; attempt < 3; attempt++) {
     const code = generateRoomCode()
@@ -56,7 +71,10 @@ export async function createRoom(
       .insert({
         code,
         game_type: gameType,
-        player_a: playerId,
+        players: [playerId],
+        player_names: playerName ? { [playerId]: playerName } : {},
+        host_player: playerId,
+        max_players: maxPlayers,
         game_state: initialState,
       })
       .select()
@@ -85,13 +103,61 @@ export async function findRoomByCode(code: string): Promise<Room | null> {
 export async function joinRoom(
   roomId: string,
   playerId: string,
+  playerName: string = '',
+): Promise<Room> {
+  // Fetch current room to get existing players
+  const { data: current, error: fetchError } = await supabase
+    .from('rooms')
+    .select()
+    .eq('id', roomId)
+    .single()
+
+  if (fetchError || !current) throw fetchError ?? new Error('Room not found')
+
+  const room = current as Room
+
+  // Prevent duplicate joins
+  if (room.players.includes(playerId)) {
+    return room
+  }
+
+  const updatedPlayers = [...room.players, playerId]
+  const updatedNames = { ...(room.player_names ?? {}), ...(playerName ? { [playerId]: playerName } : {}) }
+
+  // For 2-player games, auto-start when second player joins
+  const shouldAutoStart = room.max_players === 2 && updatedPlayers.length >= 2
+
+  const update: Record<string, unknown> = {
+    players: updatedPlayers,
+    player_names: updatedNames,
+  }
+
+  if (shouldAutoStart) {
+    update.status = 'playing'
+    update.current_turn = updatedPlayers[0]
+  }
+
+  const { data, error } = await supabase
+    .from('rooms')
+    .update(update)
+    .eq('id', roomId)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data as Room
+}
+
+export async function startRoom(
+  roomId: string,
+  gameState: TicTacToeState | MemoryGameState | UNOGameState,
   currentTurn: string,
 ): Promise<Room> {
   const { data, error } = await supabase
     .from('rooms')
     .update({
-      player_b: playerId,
       status: 'playing',
+      game_state: gameState,
       current_turn: currentTurn,
     })
     .eq('id', roomId)
@@ -104,7 +170,7 @@ export async function joinRoom(
 
 export async function updateGameState(
   roomId: string,
-  gameState: TicTacToeState | MemoryGameState,
+  gameState: TicTacToeState | MemoryGameState | UNOGameState,
   currentTurn: string | null,
   winner: string | null = null,
   status?: Room['status'],
@@ -126,12 +192,14 @@ export async function updateGameState(
 
 // ---- Realtime subscription ----
 
+let channelCounter = 0
+
 export function subscribeToRoom(
   roomId: string,
   onUpdate: (room: Room) => void,
 ): RealtimeChannel {
   const channel = supabase
-    .channel(`room:${roomId}`)
+    .channel(`room:${roomId}:${++channelCounter}`)
     .on(
       'postgres_changes',
       {

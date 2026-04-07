@@ -86,6 +86,7 @@ const en = {
   'mp.creating': 'Creating\u2026',
   'mp.joinRoom': 'Join Room',
   'mp.enterCode': 'Enter code',
+  'mp.enterName': 'Your name',
   'mp.join': 'Join',
   'mp.joining': 'Joining\u2026',
   'mp.back': '\u2190 Back',
@@ -95,9 +96,10 @@ const en = {
   'mp.waitingForPlayer': 'Waiting for opponent\u2026',
   'mp.youWin': 'You win! \uD83C\uDF89',
   'mp.opponentWins': 'Opponent wins!',
+  'mp.wins': 'wins!',
   'mp.draw': 'Draw!',
   'mp.yourTurn': 'Your turn',
-  'mp.opponentsTurn': "Opponent's turn\u2026",
+  'mp.opponentsTurn': "{{name}}'s turn\u2026",
   'mp.you': 'You:',
   'mp.opponent': 'Opponent:',
 
@@ -124,6 +126,35 @@ const en = {
   'puzzle.time': 'Time: {{time}}',
   'puzzle.newGame': 'New Game',
   'puzzle.youWon': 'Solved in {{moves}} moves \u2014 {{time}}! \uD83C\uDF89',
+
+  // Multiplayer N-player
+  'mp.shareCodePlayers': 'Share this code with other players',
+  'mp.waitingForPlayers': 'Waiting for players\u2026',
+  'mp.playerCount': '{{current}}/{{max}} players',
+  'mp.startGame': 'Start Game',
+
+  // Multiplayer UNO
+  'mp.uno.title': 'UNO',
+  'mp.uno.description':
+    'Play UNO with 2\u20134 players online. Create a room and share the code!',
+
+  // UNO game
+  'uno.title': 'UNO',
+  'uno.description':
+    'The classic card game. Match colors and numbers, use action cards, and be the first to empty your hand!',
+  'uno.playMultiplayer': 'Play Multiplayer',
+  'uno.yourTurn': 'Your turn',
+  'uno.opponentsTurn': "{{name}}'s turn\u2026",
+  'uno.drawCard': 'Draw',
+  'uno.announceUno': 'UNO!',
+  'uno.challengeUno': 'Challenge!',
+  'uno.chooseColor': 'Choose a color',
+  'uno.youWin': 'You win! \uD83C\uDF89',
+  'uno.playerWins': '{{name}} wins!',
+  'uno.cardsLeft': '{{count}} cards',
+  'uno.clickToPlay': 'Click a highlighted card to play it',
+  'uno.direction.clockwise': 'Clockwise',
+  'uno.direction.counterclockwise': 'Counter-clockwise',
 
   // Multiplayer Memory
   'mp.memory.title': 'Memory Game',

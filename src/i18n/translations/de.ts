@@ -131,6 +131,7 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   'mp.creating': 'Erstelle\u2026',
   'mp.joinRoom': 'Raum beitreten',
   'mp.enterCode': 'Code eingeben',
+  'mp.enterName': 'Dein Name',
   'mp.join': 'Beitreten',
   'mp.joining': 'Trete bei\u2026',
   'mp.back': '\u2190 Zur\u00FCck',
@@ -140,9 +141,10 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   'mp.waitingForPlayer': 'Warte auf Mitspieler\u2026',
   'mp.youWin': 'Du gewinnst! \uD83C\uDF89',
   'mp.opponentWins': 'Gegner gewinnt!',
+  'mp.wins': 'gewinnt!',
   'mp.draw': 'Unentschieden!',
   'mp.yourTurn': 'Dein Zug',
-  'mp.opponentsTurn': 'Gegner ist dran\u2026',
+  'mp.opponentsTurn': '{{name}} ist dran\u2026',
   'mp.you': 'Du:',
   'mp.opponent': 'Gegner:',
 
@@ -171,6 +173,35 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
   'puzzle.time': 'Zeit: {{time}}',
   'puzzle.newGame': 'Neues Spiel',
   'puzzle.youWon': 'Gel\u00F6st in {{moves}} Z\u00FCgen \u2014 {{time}}! \uD83C\uDF89',
+
+  // Multiplayer N-player
+  'mp.shareCodePlayers': 'Teile diesen Code mit anderen Spielern',
+  'mp.waitingForPlayers': 'Warte auf Spieler\u2026',
+  'mp.playerCount': '{{current}}/{{max}} Spieler',
+  'mp.startGame': 'Spiel starten',
+
+  // Multiplayer UNO
+  'mp.uno.title': 'UNO',
+  'mp.uno.description':
+    'Spiele UNO mit 2\u20134 Spielern online. Erstelle einen Raum und teile den Code!',
+
+  // UNO game
+  'uno.title': 'UNO',
+  'uno.description':
+    'Das klassische Kartenspiel. Passe Farben und Zahlen an, nutze Aktionskarten und werde als Erster alle Karten los!',
+  'uno.playMultiplayer': 'Multiplayer spielen',
+  'uno.yourTurn': 'Dein Zug',
+  'uno.opponentsTurn': '{{name}} ist dran\u2026',
+  'uno.drawCard': 'Ziehen',
+  'uno.announceUno': 'UNO!',
+  'uno.challengeUno': 'Anzweifeln!',
+  'uno.chooseColor': 'W\u00E4hle eine Farbe',
+  'uno.youWin': 'Du gewinnst! \uD83C\uDF89',
+  'uno.playerWins': '{{name}} gewinnt!',
+  'uno.cardsLeft': '{{count}} Karten',
+  'uno.clickToPlay': 'Klicke auf eine hervorgehobene Karte, um sie zu spielen',
+  'uno.direction.clockwise': 'Im Uhrzeigersinn',
+  'uno.direction.counterclockwise': 'Gegen den Uhrzeigersinn',
 
   // Multiplayer Memory
   'mp.memory.title': 'Memory',
