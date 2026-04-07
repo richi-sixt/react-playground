@@ -32,7 +32,7 @@ const de: Record<keyof typeof en, string> & Record<string, string> = {
     'Dokumentation meiner Lernreise. Notizen zu Patterns, Bugs und Entdeckungen.',
 
   // Footer
-  'footer.builtWith': 'Gebaut mit Next.js & React.',
+  'footer.builtWith': 'Built with Next.js & React.',
 
   // 404
   'notFound.title': 'Seite nicht gefunden',
