@@ -1,21 +1,24 @@
 'use client'
 
 import { useState } from 'react'
-import { getPlayerId } from '@/lib/player'
+import { getPlayerId, getPlayerName, setPlayerName } from '@/lib/player'
 import { useTranslation } from '@/i18n'
 import {
   createRoom,
   findRoomByCode,
   joinRoom,
+  getPlayerA,
   type Room,
   type TicTacToeState,
   type MemoryGameState,
 } from '@/lib/multiplayer'
+import type { UNOGameState } from '@/lib/uno-engine/types'
 import { WaitingRoom } from './WaitingRoom'
 
 interface GameLobbyProps {
   gameType: Room['game_type']
-  initialGameState: () => TicTacToeState | MemoryGameState
+  initialGameState: () => TicTacToeState | MemoryGameState | UNOGameState
+  maxPlayers?: number
   onRoomReady: (room: Room, playerId: string) => void
 }
 
@@ -24,6 +27,7 @@ type LobbyMode = 'choice' | 'join' | 'waiting'
 export function GameLobby({
   gameType,
   initialGameState,
+  maxPlayers = 2,
   onRoomReady,
 }: GameLobbyProps) {
   const { t } = useTranslation()
@@ -33,12 +37,21 @@ export function GameLobby({
   const [isLoading, setIsLoading] = useState(false)
   const [waitingRoom, setWaitingRoom] = useState<Room | null>(null)
   const [playerId] = useState(() => getPlayerId())
+  const [name, setName] = useState(() => getPlayerName())
 
   async function handleCreateRoom() {
     setIsLoading(true)
     setError(null)
+    const trimmedName = name.trim()
+    if (trimmedName) setPlayerName(trimmedName)
     try {
-      const room = await createRoom(gameType, playerId, initialGameState())
+      const room = await createRoom(gameType, playerId, initialGameState(), maxPlayers, trimmedName)
+      // For multi-player games (>2), let the parent handle the waiting phase
+      // so it can provide onStartGame to the WaitingRoom
+      if (maxPlayers > 2) {
+        onRoomReady(room, playerId)
+        return
+      }
       setWaitingRoom(room)
       setMode('waiting')
     } catch (err) {
@@ -69,14 +82,16 @@ export function GameLobby({
         setIsLoading(false)
         return
       }
-      if (room.status !== 'waiting') {
+      if (room.status !== 'waiting' || room.players.length >= room.max_players) {
         setError(t('mp.error.roomFull'))
         setIsLoading(false)
         return
       }
 
-      // Player A starts (for tic-tac-toe it's X)
-      const updatedRoom = await joinRoom(room.id, playerId, room.player_a)
+      // Join room (auto-starts for 2-player games)
+      const trimmedName = name.trim()
+      if (trimmedName) setPlayerName(trimmedName)
+      const updatedRoom = await joinRoom(room.id, playerId, trimmedName)
       onRoomReady(updatedRoom, playerId)
     } catch (err) {
       setError(t('mp.error.joinFailed'))
@@ -103,6 +118,20 @@ export function GameLobby({
   return (
     <div className="flex flex-col items-center">
       <div className="w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-700 dark:bg-zinc-800">
+        {/* Player name input — shown in choice and join modes */}
+        {(mode === 'choice' || mode === 'join') && (
+          <div className="mb-4">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value.slice(0, 20))}
+              placeholder={t('mp.enterName')}
+              maxLength={20}
+              className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-center text-base text-zinc-900 placeholder:text-zinc-400 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+            />
+          </div>
+        )}
+
         {mode === 'choice' && (
           <div className="flex flex-col gap-4">
             <h2 className="text-center text-lg font-semibold text-zinc-800 dark:text-zinc-200">

@@ -10,6 +10,8 @@ import {
   subscribeToRoom,
   unsubscribeFromRoom,
   updateGameState,
+  getPlayerA,
+  getPlayerB,
   type Room,
   type MemoryGameState,
 } from '@/lib/multiplayer'
@@ -137,13 +139,18 @@ export function MultiplayerMemoryGame() {
   const cardSizeClasses = getCardSizeClasses(gameGridSize)
   const emojiSizeClasses = getEmojiSizeClasses(gameGridSize)
 
-  const isPlayerA = room.player_a === playerId
+  const isPlayerA = getPlayerA(room) === playerId
   const isMyTurn = room.current_turn === playerId
   const totalPairs = cards.length / 2
   const isGameOver = matchedIndices.length === cards.length
 
   // current_turn === null means we're in a mismatch reveal phase (both locked)
   const isMismatchPhase = room.current_turn === null && !isGameOver && room.status === 'playing'
+
+  const names = room.player_names ?? {}
+  const opponentId = isPlayerA ? getPlayerB(room) : getPlayerA(room)
+  const myName = names[playerId] || t('mp.you').replace(':', '')
+  const opponentName = opponentId ? (names[opponentId] || t('mp.opponent').replace(':', '')) : t('mp.opponent').replace(':', '')
 
   // Determine winner
   const myScore = isPlayerA ? scoreA : scoreB
@@ -162,14 +169,14 @@ export function MultiplayerMemoryGame() {
       result === 'win'
         ? t('mp.youWin')
         : result === 'lose'
-          ? t('mp.opponentWins')
+          ? `${opponentName} ${t('mp.wins')}`
           : t('mp.draw')
   } else if (isMismatchPhase) {
     statusText = t('mp.memory.noMatch')
   } else if (isMyTurn) {
     statusText = t('mp.yourTurn')
   } else {
-    statusText = t('mp.opponentsTurn')
+    statusText = t('mp.opponentsTurn', { name: opponentName })
   }
 
   async function handleCardClick(index: number) {
@@ -211,9 +218,9 @@ export function MultiplayerMemoryGame() {
           allMatched ? null : playerId,
           allMatched
             ? newScoreA > newScoreB
-              ? room.player_a
+              ? getPlayerA(room)
               : newScoreB > newScoreA
-                ? room.player_b
+                ? getPlayerB(room)
                 : 'draw'
             : null,
           allMatched ? 'finished' : undefined,
@@ -228,7 +235,7 @@ export function MultiplayerMemoryGame() {
 
         // Only the active player runs the timeout to flip back
         mismatchTimeoutRef.current = setTimeout(async () => {
-          const opponentId = isPlayerA ? room.player_b : room.player_a
+          const opponentId = isPlayerA ? getPlayerB(room) : getPlayerA(room)
           await updateGameState(
             room.id,
             { ...state, flippedIndices: [], moves: moves + 1 },
@@ -251,7 +258,7 @@ export function MultiplayerMemoryGame() {
               : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400',
           )}
         >
-          {t('mp.you')} {myScore}
+          {myName}: {myScore}
         </div>
         <div
           className={clsx(
@@ -261,7 +268,7 @@ export function MultiplayerMemoryGame() {
               : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400',
           )}
         >
-          {t('mp.opponent')} {opponentScore}
+          {opponentName}: {opponentScore}
         </div>
         <div className="text-sm text-zinc-500 dark:text-zinc-400">
           {t('mp.memory.moves', { count: moves })} | {t('mp.memory.pairs', { matched: matchedIndices.length / 2, total: totalPairs })}

@@ -8,6 +8,8 @@ import {
   subscribeToRoom,
   unsubscribeFromRoom,
   updateGameState,
+  getPlayerA,
+  getPlayerB,
   type Room,
   type TicTacToeState,
 } from '@/lib/multiplayer'
@@ -104,7 +106,7 @@ export function MultiplayerTicTacToe() {
   // ---- Game phase ----
   const state = room.game_state as TicTacToeState
   const squares = state.squares
-  const isPlayerA = room.player_a === playerId
+  const isPlayerA = getPlayerA(room) === playerId
   const myMark = isPlayerA ? 'X' : 'O'
   const isMyTurn = room.current_turn === playerId
   const winner = calculateWinner(squares)
@@ -113,19 +115,24 @@ export function MultiplayerTicTacToe() {
 
   // Determine winner identity
   let winnerPlayerId: string | null = null
-  if (winner === 'X') winnerPlayerId = room.player_a
-  if (winner === 'O') winnerPlayerId = room.player_b
+  if (winner === 'X') winnerPlayerId = getPlayerA(room)
+  if (winner === 'O') winnerPlayerId = getPlayerB(room)
+
+  const names = room.player_names ?? {}
+  const opponentId = isPlayerA ? getPlayerB(room) : getPlayerA(room)
+  const myName = names[playerId] || t('mp.you').replace(':', '')
+  const opponentName = opponentId ? (names[opponentId] || t('mp.opponent').replace(':', '')) : t('mp.opponent').replace(':', '')
 
   // Status text
   let statusText: string
   if (winner) {
-    statusText = winnerPlayerId === playerId ? t('mp.youWin') : t('mp.opponentWins')
+    statusText = winnerPlayerId === playerId ? t('mp.youWin') : `${opponentName} ${t('mp.wins')}`
   } else if (isDraw) {
     statusText = t('mp.draw')
   } else if (isMyTurn) {
     statusText = t('mp.ttt.yourTurnMark', { mark: myMark })
   } else {
-    statusText = t('mp.opponentsTurn')
+    statusText = t('mp.opponentsTurn', { name: opponentName })
   }
 
   async function handleClick(i: number) {
@@ -140,13 +147,13 @@ export function MultiplayerTicTacToe() {
     const nextTurn = nextWinner || nextIsDraw
       ? null
       : isPlayerA
-        ? room.player_b
-        : room.player_a
+        ? getPlayerB(room)
+        : getPlayerA(room)
 
     const nextWinnerPlayer = nextWinner === 'X'
-      ? room.player_a
+      ? getPlayerA(room)
       : nextWinner === 'O'
-        ? room.player_b
+        ? getPlayerB(room)
         : null
 
     await updateGameState(
@@ -184,7 +191,7 @@ export function MultiplayerTicTacToe() {
             ? 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400'
             : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400',
         )}>
-          {t('mp.you')} {myMark}
+          {myName}: {myMark}
         </div>
         <div className={clsx(
           'rounded-md px-3 py-1 text-sm font-medium',
@@ -192,7 +199,7 @@ export function MultiplayerTicTacToe() {
             ? 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400'
             : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400',
         )}>
-          {t('mp.opponent')} {isPlayerA ? 'O' : 'X'}
+          {opponentName}: {isPlayerA ? 'O' : 'X'}
         </div>
       </div>
 
