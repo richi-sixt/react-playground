@@ -14,8 +14,9 @@
 /build
 /deploy
 
-# generated journal entry pages (copied by scripts/prepare-content.mjs)
+# generated journal content (copied by scripts/prepare-content.mjs)
 /src/app/journal/*/
+/public/journal/
 
 # misc
 .DS_Store
